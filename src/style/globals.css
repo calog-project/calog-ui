@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-size: 62.5%;
+  }
+
+  body {
+    font-size: 1.6rem;
+    font-family: 'Pretendard';
+    font-weight: 400;
+  }
+
+  input {
+    outline: none;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #112d4e;
+    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+  }
+
+  ::-webkit-scrollbar {
+    display: block;
+    height: 8px;
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #112d4e; /* 스크롤바 핸들의 배경 색상 (Violet) */
+    border-radius: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1effd; /* 스크롤바 트랙의 배경 색상 */
+  }
+
+  .scrollbar-hide {
+    scrollbar-gutter: stable both-edges;
+  }
+
+  /* 스크롤바 숨김 */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* 호버 시 스크롤바 표시 - WebKit 기반 브라우저용 */
+  .scrollbar-hide:hover::-webkit-scrollbar {
+    display: block;
+    width: 8px;
+    height: 8px;
+  }
+
+  /* 호버 시 스크롤바 표시 - Firefox용 */
+  .scrollbar-hide:hover {
+    scrollbar-width: auto;
+  }
+
+  /* 스크롤바 트랙 스타일 */
+  .scrollbar-hide::-webkit-scrollbar-track {
+    background: #f1effd; /* 스크롤바 트랙의 배경 색상 */
+  }
+
+  /* 스크롤바 핸들 스타일 */
+  .scrollbar-hide::-webkit-scrollbar-thumb {
+    background-color: #112d4e; /* 스크롤바 핸들의 배경 색상 (Violet) */
+    border-radius: 8px;
+  }
+
+  /* 호버 시 스크롤바 핸들 스타일 변경 */
+  .scrollbar-hide:hover::-webkit-scrollbar-thumb {
+    background-color: #3f72af; /* 호버 시 스크롤바 핸들의 배경 색상을 어둡게 조정 */
+  }
+
+  :root {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    cursor: default;
+    line-height: 1.5;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    -moz-tab-size: 4;
+    tab-size: 4;
+    --red: #d6173a;
+  }
+
+  @font-face {
+    font-family: Pretendard;
+    font-weight: 400;
+    font-display: swap;
+    src: url('../../public/fonts/Pretendard-Regular.woff') format('woff');
+  }
+
+  @font-face {
+    font-family: Pretendard;
+    font-weight: 500;
+    font-display: swap;
+    src: url('../../public/fonts/Pretendard-Medium.woff') format('woff');
+  }
+
+  @font-face {
+    font-family: Pretendard;
+    font-weight: 600;
+    font-display: swap;
+    src: url('../../public/fonts/Pretendard-SemiBold.woff') format('woff');
+  }
+
+  @font-face {
+    font-family: Pretendard;
+    font-weight: 700;
+    font-display: swap;
+    src: url('../../public/fonts/Pretendard-Bold.woff') format('woff');
+  }
+}
