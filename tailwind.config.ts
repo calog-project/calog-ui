@@ -1,4 +1,6 @@
-module.exports = {
+import type { Config } from 'tailwindcss';
+
+const config: Config = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -51,7 +53,11 @@ module.exports = {
         modal: '1000',
         toast: '1200',
       },
+      boxShadow: {
+        custom: '0px 0px 8px 0px rgba(0, 0, 0, 0.20)',
+      },
     },
   },
   plugins: [],
 };
+export default config;
