@@ -6,6 +6,7 @@ import sectionOne from '../../public/images/section1.svg';
 import sectionSecond from '../../public/images/section2.svg';
 import sectionThird from '../../public/images/section3.svg';
 import AnimationSection from '@/components/AnimationSection/AnimationSection';
+import Button from '@/components/Button/Button';
 
 const Section = ({ children, className }: { children: ReactNode; className?: string }) => {
   const sectionClass = twMerge('mx-auto flex w-full gap-3 h-screen ' + className);
@@ -24,8 +25,9 @@ export default function Home() {
             <h1 className="text-[48px] font-bold">모든 일정을 한눈에, 함께하는 즐거움!</h1>
             <p className="text-[24px] font-semibold mb-[51px]">캘린더로 일정을 공유하고, 모임을 만들고, 소통하세요.</p>
 
-            {/* 버튼 공통컴포넌트 만든 후 적용 */}
-            <button>시작하기</button>
+            <Button buttonSize="normal" bgColor="blue">
+              시작하기
+            </Button>
           </div>
         </Section>
 

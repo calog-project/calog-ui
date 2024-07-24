@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Button from '../Button/Button';
 
 const LandingHeader = () => {
   return (
@@ -8,10 +9,14 @@ const LandingHeader = () => {
           Calog
         </Link>
 
-        <div>
+        <div className="flex gap-3">
           {/* 버튼 공통컴포넌트 만든 후 적용 */}
-          <button>회원가입</button>
-          <button>로그인</button>
+          <Button buttonSize="normal" bgColor="blue">
+            회원가입
+          </Button>
+          <Button buttonSize="normal" bgColor="white">
+            로그인
+          </Button>
         </div>
       </div>
     </header>
