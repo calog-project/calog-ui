@@ -14,6 +14,7 @@ const config: Config = {
           '3f': '#3F72AF',
           76: '#76A5EA',
           db: '#DBE2EF',
+          33: '#3366FE',
         },
         gray: {
           78: '#787486',
@@ -21,6 +22,7 @@ const config: Config = {
           d9: '#D9D9D9',
           ee: '#EEEEEE',
           fa: '#FAFAFA',
+          98: '#989898',
         },
         black: {
           DEFAULT: '#000',
