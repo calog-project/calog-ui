@@ -11,10 +11,10 @@ const LandingHeader = () => {
 
         <div className="flex gap-3">
           {/* 버튼 공통컴포넌트 만든 후 적용 */}
-          <Button buttonSize="normal" bgColor="blue">
+          <Button buttonSize="normal" bgColor="filled" className="w-[110px] h-[42px] bg-blue-33">
             회원가입
           </Button>
-          <Button buttonSize="normal" bgColor="white">
+          <Button buttonSize="normal" bgColor="ghost" className="w-[110px] h-[42px]">
             로그인
           </Button>
         </div>

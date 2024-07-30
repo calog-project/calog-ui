@@ -8,15 +8,15 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, PropsWith
 
 type ButtonSize = 'normal';
 
-type BgColor = 'blue' | 'white';
+type BgColor = 'ghost' | 'filled';
 
 const buttonSizeClasses = {
-  normal: 'min-w-[110px] h-[42px] rounded-lg',
+  normal: 'w-full rounded-lg',
 };
 
 const bgColorClasses: Record<BgColor, string> = {
-  white: 'bg-white border border-gray-98',
-  blue: 'bg-blue-33 text-white',
+  ghost: 'border border-gray-98',
+  filled: 'text-white',
 };
 
 const Button = ({ children, type = 'button', buttonSize, bgColor, onClick, className, disabled }: ButtonProps) => {
