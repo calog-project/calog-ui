@@ -13,7 +13,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 type InputSize = 'normal';
 
 const inputClasses = {
-  normal: 'w-[520px]',
+  normal: 'w-full',
 };
 
 const Input = ({ title, inputSize, className, register, type, name, placeholder, error, onChange }: InputProps) => {
