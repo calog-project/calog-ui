@@ -28,26 +28,26 @@ const Menu = ({ isOpen }: TMenuProps) => {
             <Link
               href={menu?.link || ''}
               key={menu?.name}
-              className={`group flex items-center text-4 ${isOpen && 'gap-5'} font-medium p-4 ${menu?.margin && 'mt-10'} hover:bg-[#3366FE] hover:text-white hover:rounded-md`}>
+              className={`group flex items-center text-4 ${isOpen && 'gap-5'} font-medium p-4 ${menu?.margin && 'mt-10'} hover:bg-blue-33 hover:text-white hover:rounded-md`}>
               <div>{React.createElement(menu?.icon, { size: '20' })}</div>
               <h2 className={`whitespace-pre duration-500 ${!isOpen && 'opacity-0 translate-x-28 overflow-hidden'}`}>
                 {menu?.name}
               </h2>
               <h2
-                className={`${isOpen && 'hidden'} absolute left-48 bg-[#3366FE] font-semibold whitespace-pre text-white rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-[55px] group-hover:duration-300 group-hover:w-fit`}>
+                className={`${isOpen && 'hidden'} absolute left-48 bg-blue-33 font-semibold whitespace-pre text-white rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-[55px] group-hover:duration-300 group-hover:w-fit`}>
                 {menu?.name}
               </h2>
             </Link>
           ) : (
             <button
               type="button"
-              className={`group flex items-center text-4 gap-5 font-medium mb-10 ${!isOpen ? 'p-2' : 'p-4'} hover:bg-[#3366FE] hover:text-white hover:rounded-md`}>
+              className={`group flex items-center text-4 gap-5 font-medium mb-10 ${!isOpen ? 'p-2' : 'p-4'} hover:bg-blue-33 hover:text-white hover:rounded-md`}>
               <div>{React.createElement(LuLogOut, { size: '20' })}</div>
               <h2 className={`whitespace-pre duration-500 ${!isOpen && 'opacity-0 translate-x-28 overflow-hidden'}`}>
                 {menu?.name}
               </h2>
               <h2
-                className={`${isOpen && 'hidden'} absolute left-48 bg-[#3366FE] font-semibold whitespace-pre text-white rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-20 group-hover:duration-300 group-hover:w-fit`}>
+                className={`${isOpen && 'hidden'} absolute left-48 bg-blue-33 font-semibold whitespace-pre text-white rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-20 group-hover:duration-300 group-hover:w-fit`}>
                 {menu?.name}
               </h2>
             </button>
