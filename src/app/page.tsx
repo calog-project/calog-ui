@@ -1,12 +1,12 @@
 import Image from 'next/image';
 import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
-import LandingHeader from '@/components/LandingHeader/LandingHeader';
 import sectionOne from '../../public/images/section1.svg';
 import sectionSecond from '../../public/images/section2.svg';
 import sectionThird from '../../public/images/section3.svg';
-import AnimationSection from '@/components/AnimationSection/AnimationSection';
-import Button from '@/components/Button/Button';
+import AnimationSection from '@/components/commons/animationSection/AnimationSection';
+import Button from '@/components/commons/button/Button';
+import Header from '@/components/domains/landing/header/Header';
 
 const Section = ({ children, className }: { children: ReactNode; className?: string }) => {
   const sectionClass = twMerge('mx-auto flex w-full gap-3 h-screen ' + className);
@@ -16,7 +16,7 @@ const Section = ({ children, className }: { children: ReactNode; className?: str
 export default function Home() {
   return (
     <>
-      <LandingHeader />
+      <Header />
 
       <AnimationSection className="h-screen w-full overflow-hidden scroll-smooth">
         <Section className="flex justify-center items-center">
