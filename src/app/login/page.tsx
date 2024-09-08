@@ -54,13 +54,13 @@ export default function LoginPage() {
                 name="email"
                 placeholder="이메일을 입력해 주세요."
                 register={register('email', {
-                  required: true, // 필수 입력값으로 설정
+                  required: '이메일은 필수 입력값입니다.',
                   pattern: {
                     value: /^\S+@\S+$/i,
                     message: '유효한 이메일 형식을 입력해 주세요.',
                   },
                 })}
-                error={errors.email as any} // 오류 메시지 전달
+                error={errors.email}
                 className="w-full"
               />
             </div>
@@ -69,18 +69,18 @@ export default function LoginPage() {
                 title="비밀번호"
                 inputSize="normal"
                 type={showPassword ? 'text' : 'password'} // 비밀번호 필드 타입 동적 변경
+                name="password"
                 placeholder="비밀번호를 입력해 주세요."
-                {...register('password', {
-                  required: true, // 필수 입력값으로 설정
+                register={register('password', {
+                  required: '비밀번호는 필수 입력값입니다.',
                   pattern: {
-                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, // 비밀번호 강도 유효성 검사
+                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
                     message: '비밀번호는 최소 8자, 하나 이상의 대문자, 소문자, 숫자 및 특수 문자를 포함해야 합니다.',
                   },
                 })}
                 error={errors.password}
                 className="w-full pr-10"
               />
-              {/* 눈 모양 아이콘을 입력 필드의 오른쪽에 정확히 배치 */}
               <button
                 type="button"
                 onClick={togglePasswordVisibility}
