@@ -21,7 +21,7 @@ const menus = [
 const Menu = ({ isOpen }: TMenuProps) => {
   return (
     <div
-      className={`flex flex-col ${isOpen ? 'items-start justify-between' : 'items-center justify-center'} w-full transition-all duration-300`}>
+      className={`flex flex-col ${isOpen ? 'items-start justify-between mt-8' : 'items-center justify-center mt-0'} w-full transition-all duration-300`}>
       <div className="mt-10 w-full inline-flex flex-col flex-1 gap-5 relative">
         {menus?.map((menu) =>
           menu.name !== 'logout' ? (
@@ -34,7 +34,7 @@ const Menu = ({ isOpen }: TMenuProps) => {
                 {menu?.name}
               </h2>
               <h2
-                className={`${isOpen && 'hidden'} absolute left-48 bg-blue-33 font-semibold whitespace-pre text-white rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-[55px] group-hover:duration-300 group-hover:w-fit`}>
+                className={`${isOpen && 'hidden'} absolute left-60 bg-blue-33 font-semibold whitespace-pre text-white rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-[55px] group-hover:duration-300 group-hover:w-fit`}>
                 {menu?.name}
               </h2>
             </Link>
