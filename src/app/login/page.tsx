@@ -4,7 +4,13 @@ import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+
 import { SubmitHandler, useForm } from 'react-hook-form';
+
+import KaKaoIcon from '../../../public/images/KaKaoIcon.svg';
+import GoogleIcon from '../../../public/images/GoogleIcon.svg';
+import useAuthStore from '@/stores/authStore';
 
 interface LoginForm {
   email: string;
@@ -20,24 +26,41 @@ export default function LoginPage() {
     mode: 'onChange',
   });
 
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const togglePasswordVisibility = (): void => {
     setShowPassword((prev) => !prev);
   };
 
-  const onSubmit: SubmitHandler<LoginForm> = (data) => {
-    console.log('로그인', data.email, data.password);
-    //TODO 로그인 후 메인페이지로 가도록
+  const onSubmit: SubmitHandler<LoginForm> = async (data) => {
+    try {
+      console.log('로그인', data.email, data.password);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CALOG_API_URL}/api/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('로그인 실패');
+      }
+
+      const result = await response.json();
+      const { email, accessToken } = result;
+
+      useAuthStore.getState().login(email, accessToken);
+      router.push("/")
+    } catch (err) {
+      console.error('로그인 에러', err);
+      throw new Error('로그인 실패');
+    }
   };
 
   const handleOAuthLogin = async (provider: string) => {
-    try {
-      console.log(`${provider} OAuth 로그인 시도`);
-      //TODO 백엔드에 fetch 요청 
-    } catch (err) {
-      console.error('OAuth 로그인 에러 발생', err);
-    }
+    window.location.href = `http://localhost:5000/api/auth/${provider}`
   };
 
   return (
@@ -64,7 +87,7 @@ export default function LoginPage() {
                 className="w-full"
               />
             </div>
-            <div className="relative w-[523px]"> 
+            <div className="relative w-[523px]">
               <Input
                 title="비밀번호"
                 inputSize="normal"
@@ -85,12 +108,7 @@ export default function LoginPage() {
                 type="button"
                 onClick={togglePasswordVisibility}
                 className="absolute inset-y-11 right-3 flex items-center justify-center text-gray-500 h-[50px]">
-                <Image
-                  src="/images/eyes.svg"
-                  alt="비밀번호 보기"
-                  width={24}
-                  height={24}
-                />
+                <Image src={showPassword ? "/images/eyes-open.svg" : "/images/eyes.svg"} alt={showPassword ? "비밀번호 숨기기" : "비밀번호 보기"} width={24} height={24} />
               </button>
             </div>
             <div className="h-[52px] w-[523px]">
@@ -106,33 +124,35 @@ export default function LoginPage() {
           </div>
         </form>
         <div className="relative flex items-center justify-between my-6 w-[523px] mx-auto">
-          <div className="w-[120px] h-px bg-gray-300"></div>
+          <hr className="w-[120px] h-px bg-gray-300"></hr>
           <span className="px-3 text-gray-400 bg-white z-10">SNS 로그인</span>
-          <div className="w-[120px] h-px bg-gray-300"></div>
+          <hr className="w-[120px] h-px bg-gray-300"></hr>
         </div>
-        <div className="flex justify-around mt-6">
-          <button
-            className="w-[250px] h-[50px] rounded-lg bg-cover bg-center cursor-pointer"
-            style={{
-              backgroundImage: "url('/images/KaKao.svg')",
-              backgroundColor: '#FFEA00',
-            }}
+        <div className="flex justify-around mt-6" >
+          <Button
+            className="w-[250px] h-[50px] rounded-lg bg-cover bg-center bg-[#FFEA00]  flex items-center justify-center gap-4 "
+            buttonSize="normal"
+            bgColor="filled"
             onClick={() => handleOAuthLogin('kakao')}>
-            <span className="sr-only">카카오톡 로그인</span>
-          </button>
-          <button
-            className="w-[250px] h-[50px] rounded-lg bg-cover bg-center cursor-pointer"
-            style={{
-              backgroundImage: "url('/images/Google.svg')",
-              backgroundColor: '#EFEFEF',
-            }}
+            <Image src={KaKaoIcon} alt="카카오 로고 아이콘" className="w-[22px] h-[25px] rounded-[5px]" />
+            <p className='text-black font-medium'>
+            카카오톡
+            </p>
+          </Button>
+          <Button
+            className="w-[250px] h-[50px] rounded-lg bg-cover bg-center bg-[#EFEFEF] flex items-center justify-center gap-4 "
+            buttonSize="normal"
+            bgColor="filled"
             onClick={() => handleOAuthLogin('google')}>
-            <span className="sr-only">구글 로그인</span>
-          </button>
+            <Image src={GoogleIcon} alt="구글 로고 아이콘" className="w-[32px] h-[32px] rounded-[5px]" />
+            <p className='text-black font-medium'>
+            구글
+            </p>
+          </Button>
         </div>
         <div className="mt-6 text-center">
-          아직 캘로그 회원이 아니신가요?{' '}
-          <Link href="/" className="text-blue-600 hover:underline">
+          아직 캘로그 회원이 아니신가요? {/* TODO 이후 href 회원가입 경로로 변경 */}
+          <Link href="/signup" className="text-blue-600 hover:underline">
             회원가입
           </Link>
         </div>
