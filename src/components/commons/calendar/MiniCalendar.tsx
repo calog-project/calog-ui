@@ -41,17 +41,15 @@ const MiniCalendar: React.FC = () => {
         {weekCalendarList.flat().map((day, index) => {
           const isSunday = day.day() === 0;
           const isSaturday = day.day() === 6;
-          const isCurrentMonth = day.month() === currentDate.month();
+          const isCurrentMonth = day.isSame(currentDate, 'month');
           const isToday = day.isSame(today, 'day');
 
           return (
             <div
               key={index}
-              className={`flex w-10 h-10 m-auto justify-center items-center text-center cursor-pointer ${
-                !isToday
-                  ? 'hover:bg-blue-76 hover:bg-opacity-10 hover:rounded-full'
-                  : 'rounded-full m-auto bg-blue-33 text-white '
-              } ${getDayClass(isCurrentMonth, isSunday, isSaturday)}`}>
+              className={`flex w-10 h-10 m-auto justify-center items-center text-center cursor-pointer hover:bg-blue-76 hover:bg-opacity-10 hover:rounded-full ${
+                isToday && 'rounded-full m-auto bg-blue-33 text-white'
+              } ${!isCurrentMonth && 'opacity-20 text-gray-89'} ${getDayClass(isSunday, isSaturday)}`}>
               {day.date()}
             </div>
           );
