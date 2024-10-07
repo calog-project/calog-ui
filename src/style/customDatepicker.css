@@ -1,0 +1,92 @@
+/* 전체 달력 배경 */
+.custom-calendar {
+  height: 340px;
+  border: none;
+  border-radius: 0 !important;
+}
+
+/* 날짜 선택 스타일 */
+.react-datepicker__day {
+  @apply w-20 h-[43px] rounded-[9999px] flex justify-center items-center;
+}
+
+.react-datepicker__day:hover {
+  background-color: #4171ff !important;
+  border-radius: 50% !important;
+  color: white;
+}
+
+.react-datepicker__month-container {
+  width: 332px;
+}
+
+.react-datepicker__week {
+  @apply flex justify-center;
+}
+
+/* 선택된 날짜 */
+.react-datepicker__day--selected {
+  @apply bg-blue-500 text-white;
+  border-radius: 50%;
+  background-color: white !important;
+}
+/* 범위 내 날짜 */
+.react-datepicker__day--in-range {
+  @apply bg-gray-100 text-gray-700;
+}
+
+.react-datepicker__month {
+  border: 1px solid #ddd;
+  border-top: 0;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  margin: 0;
+}
+
+/* 주말 스타일 (일요일) */
+.react-datepicker__day--weekend {
+  @apply text-red;
+}
+
+/* 달력 헤더 */
+.react-datepicker__current-month {
+  @apply text-lg font-bold;
+}
+
+.react-datepicker__header {
+  @apply bg-gray-100 border-b border-gray-300;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.react-datepicker__day--in-selecting-range:not(
+    .react-datepicker__day--in-range,
+    .react-datepicker__month-text--in-range,
+    .react-datepicker__quarter-text--in-range,
+    .react-datepicker__year-text--in-range
+  ) {
+  @apply bg-blue-41 text-white;
+}
+
+.react-datepicker__day--keyboard-selected {
+  background-color: rgb(243 244 246);
+  border-radius: 50%;
+}
+
+.react-datepicker__day--keyboard-selected:not([aria-disabled='true']):hover {
+  @apply bg-blue-41 rounded-[9999px] text-white;
+}
+
+.react-datepicker__day--in-range:hover {
+  @apply bg-blue-41 rounded-[9999px];
+}
+
+.react-datepicker__day-names {
+  @apply flex justify-center text-base;
+}
+
+.react-datepicker__day-name {
+  @apply w-20 py-2;
+}
