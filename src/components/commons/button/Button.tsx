@@ -1,9 +1,10 @@
-import { ButtonHTMLAttributes, PropsWithChildren } from 'react';
+import { ButtonHTMLAttributes, PropsWithChildren, Ref } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, PropsWithChildren {
   buttonSize: ButtonSize;
   bgColor: BgColor;
+  ref?: Ref<HTMLButtonElement>;
 }
 
 type ButtonSize = 'normal';
