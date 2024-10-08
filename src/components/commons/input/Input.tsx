@@ -20,7 +20,7 @@ const Input = ({ title, inputSize, className, register, type, name, placeholder,
   const inputClass = twMerge(inputClasses[inputSize], className);
   return (
     <div className="flex flex-col">
-      <label htmlFor={name} className="mb-2">
+      <label htmlFor={name} className="mb-2 text-xl font-semibold">
         {title}
       </label>
       <input

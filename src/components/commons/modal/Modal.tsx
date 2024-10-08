@@ -20,7 +20,9 @@ const Modal = ({ children, openModal, handleModalClose, className }: ModalProps)
   return (
     <ModalPortal>
       <div className="fixed left-0 top-0 z-[100] h-full w-full bg-black-overlay" onClick={handleModalClose}>
-        <div className={`${modalClass} ${openModal ? open : ''}`}>{children}</div>
+        <div onClick={(event) => event.stopPropagation()} className={`${modalClass} ${openModal ? open : ''}`}>
+          {children}
+        </div>
       </div>
     </ModalPortal>
   );

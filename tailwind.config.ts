@@ -15,6 +15,7 @@ const config: Config = {
           76: '#76A5EA',
           db: '#DBE2EF',
           33: '#3366FE',
+          41: '#4171FF',
         },
         gray: {
           78: '#787486',
@@ -23,6 +24,8 @@ const config: Config = {
           ee: '#EEEEEE',
           fa: '#FAFAFA',
           98: '#989898',
+          ef: '#EFEFEF',
+          a9: '#A9A9A9',
         },
         black: {
           DEFAULT: '#000',
