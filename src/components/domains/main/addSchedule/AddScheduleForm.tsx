@@ -35,7 +35,7 @@ const AddScheduleForm = ({ handleModalClose }: AddScheduleFormProps) => {
     setTags(tags.filter((tag, id) => id != tagId));
   };
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== 'Enter') return; // 엔터키가 아닌 경우 무시
     const value = e.currentTarget.value.trim(); // 공백 제거
     if (value && !tags.includes(value)) {
@@ -153,7 +153,7 @@ const AddScheduleForm = ({ handleModalClose }: AddScheduleFormProps) => {
             name="tag"
             placeholder={tags.length == 0 ? '엔터를 입력하여 태그를 등록해주세요' : ''}
             className="py-3 h-[46px] flex-grow rounded-lg text-base font-normal"
-            onKeyDown={handleKeyDown}
+            onKeyUp={handleKeyUp}
           />
         </div>
       </label>
