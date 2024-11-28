@@ -1,3 +1,5 @@
+@import 'react-datepicker/dist/react-datepicker.css';
+
 /* 전체 달력 배경 */
 .custom-calendar {
   height: 340px;
@@ -50,7 +52,7 @@
 
 /* 달력 헤더 */
 .react-datepicker__current-month {
-  @apply text-lg font-bold;
+  @apply text-[18px] font-bold;
 }
 
 .react-datepicker__header {
@@ -84,7 +86,7 @@
 }
 
 .react-datepicker__day-names {
-  @apply flex justify-center text-base;
+  @apply flex justify-center text-[14px];
 }
 
 .react-datepicker__day-name {
