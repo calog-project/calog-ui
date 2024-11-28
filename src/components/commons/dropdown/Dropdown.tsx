@@ -4,7 +4,7 @@ import { twMerge } from 'tailwind-merge';
 
 const Dropdown = ({ children, className, itemRef }: DropdownProps) => {
   const DefaultDropDownClass =
-    'absolute rounded-lg border border-solid border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 z-10 shadow-custom-shadow overflow-y-auto max-h-[200px]';
+    'absolute rounded-lg border border-solid border-gray-300 bg-white px-4 py-3 text-[14px] text-gray-900 z-10 shadow-custom-shadow overflow-y-auto max-h-[200px]';
 
   const DropDownClass = twMerge(DefaultDropDownClass, className);
   return (
@@ -16,7 +16,7 @@ const Dropdown = ({ children, className, itemRef }: DropdownProps) => {
 
 const TextItem = ({ children, className, onClick }: DropdownProps) => {
   const DefaultTextItemClass =
-    'text-nowrap cursor-pointer p-1 text-gray-900 font-semibold hover:bg-gray-100 rounded text-lg';
+    'text-nowrap cursor-pointer p-2 text-gray-900 font-semibold hover:bg-gray-100 rounded text-[14px]';
   const TextItemClass = twMerge(DefaultTextItemClass, className);
 
   return (
