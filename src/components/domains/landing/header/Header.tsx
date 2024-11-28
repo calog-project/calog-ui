@@ -12,13 +12,16 @@ const Header = () => {
         </Link>
 
         <div className="flex gap-3">
-          {/* 버튼 공통컴포넌트 만든 후 적용 */}
-          <Button buttonSize="normal" bgColor="filled" className="w-[110px] h-[42px] bg-blue-33 text-xl">
-            <Link href="/">회원가입</Link>
-          </Button>
-          <Button buttonSize="normal" bgColor="ghost" className="w-[110px] h-[42px] text-xl">
-            <Link href="/login">로그인</Link>
-          </Button>
+          <Link href="/">
+            <Button buttonSize="normal" bgColor="filled" className="w-[110px] h-[42px] bg-blue-33 text-xl">
+              회원가입
+            </Button>
+          </Link>
+          <Link href="/login">
+            <Button buttonSize="normal" bgColor="ghost" className="w-[110px] h-[42px] text-xl">
+              로그인
+            </Button>
+          </Link>
         </div>
       </div>
     </header>
