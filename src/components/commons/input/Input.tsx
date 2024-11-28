@@ -8,6 +8,8 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   register?: UseFormRegisterReturn;
   error?: FieldError;
   onChange?: ChangeEventHandler<HTMLInputElement>;
+  inputCount?: number;
+  maxLength?: number;
 }
 
 type InputSize = 'normal';
@@ -16,7 +18,19 @@ const inputClasses = {
   normal: 'w-full',
 };
 
-const Input = ({ title, inputSize, className, register, type, name, placeholder, error, onChange }: InputProps) => {
+const Input = ({
+  title,
+  inputSize,
+  className,
+  register,
+  type,
+  name,
+  placeholder,
+  error,
+  onChange,
+  inputCount,
+  maxLength,
+}: InputProps) => {
   const inputClass = twMerge(inputClasses[inputSize], className);
   return (
     <div className="flex flex-col">
@@ -31,8 +45,15 @@ const Input = ({ title, inputSize, className, register, type, name, placeholder,
         placeholder={placeholder}
         onChange={onChange}
         className={`${inputClass} h-[50px] rounded-lg px-4 py-3 border border-gray-d9 focus:border-gray-98`}
+        maxLength={maxLength}
       />
-      <div>{error?.message && <span className="text-[14px] text-red">{error.message}</span>}</div>
+      <div className={`flex ${error?.message ? 'justify-between' : 'justify-end'}`}>
+        {error?.message && <span className="text-[14px] text-red">{error.message}</span>}
+        <p className="flex justify-end text-[12px]">
+          <span>{inputCount}</span>
+          <span>/{maxLength}</span>
+        </p>
+      </div>
     </div>
   );
 };
