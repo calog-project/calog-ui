@@ -25,7 +25,7 @@ interface AddScheduleForm {
   start: Date;
   end: Date;
   category?: string;
-  tag?: string[]; // 추후 number로 변경, 친구 태그로 변경 시 "joiner"로 필드명 변경 예정
+  tag?: number[]; // 추후 number로 변경, 친구 태그로 변경 시 "joiner"로 필드명 변경 예정
   description?: string;
 }
 
