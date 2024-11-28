@@ -36,10 +36,10 @@ export default function LoginPage() {
     try {
       console.log('로그인', data.email, data.password);
       const response = await fetch(`${process.env.NEXT_PUBLIC_CALOG_API_URL}/api/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(data),
       });
 
@@ -51,7 +51,7 @@ export default function LoginPage() {
       const { email, accessToken } = result;
 
       useAuthStore.getState().login(email, accessToken);
-      router.push("/")
+      router.push('/');
     } catch (err) {
       console.error('로그인 에러', err);
       throw new Error('로그인 실패');
@@ -59,7 +59,7 @@ export default function LoginPage() {
   };
 
   const handleOAuthLogin = async (provider: string) => {
-    window.location.href = `http://localhost:5000/api/auth/${provider}`
+    window.location.href = `${process.env.NEXT_PUBLIC_CALOG_API_URL}/api/auth/${provider}`;
   };
 
   return (
@@ -107,7 +107,12 @@ export default function LoginPage() {
                 type="button"
                 onClick={togglePasswordVisibility}
                 className="absolute inset-y-11 right-3 flex items-center justify-center text-gray-500 h-[50px]">
-                <Image src={showPassword ? "/images/eyes-open.svg" : "/images/eyes.svg"} alt={showPassword ? "비밀번호 숨기기" : "비밀번호 보기"} width={24} height={24} />
+                <Image
+                  src={showPassword ? '/images/eyes-open.svg' : '/images/eyes.svg'}
+                  alt={showPassword ? '비밀번호 숨기기' : '비밀번호 보기'}
+                  width={24}
+                  height={24}
+                />
               </button>
             </div>
             <div className="h-[52px] w-[523px]">
@@ -123,20 +128,18 @@ export default function LoginPage() {
           </div>
         </form>
         <div className="relative flex items-center justify-between my-6 w-[523px] mx-auto">
-          <hr className="w-[120px] h-px bg-gray-300"></hr>
+          <hr className="w-[120px] h-px bg-gray-300" />
           <span className="px-3 text-gray-400 bg-white z-10">SNS 로그인</span>
-          <hr className="w-[120px] h-px bg-gray-300"></hr>
+          <hr className="w-[120px] h-px bg-gray-300" />
         </div>
-        <div className="flex justify-around mt-6" >
+        <div className="flex justify-around mt-6">
           <Button
             className="w-[250px] h-[50px] rounded-lg bg-cover bg-center bg-[#FFEA00]  flex items-center justify-center gap-4 "
             buttonSize="normal"
             bgColor="filled"
             onClick={() => handleOAuthLogin('kakao')}>
             <Image src={KaKaoIcon} alt="카카오 로고 아이콘" className="w-[22px] h-[25px] rounded-[5px]" />
-            <p className='text-black font-medium'>
-            카카오톡
-            </p>
+            <p className="text-black font-medium">카카오톡</p>
           </Button>
           <Button
             className="w-[250px] h-[50px] rounded-lg bg-cover bg-center bg-[#EFEFEF] flex items-center justify-center gap-4 "
@@ -144,9 +147,7 @@ export default function LoginPage() {
             bgColor="filled"
             onClick={() => handleOAuthLogin('google')}>
             <Image src={GoogleIcon} alt="구글 로고 아이콘" className="w-[32px] h-[32px] rounded-[5px]" />
-            <p className='text-black font-medium'>
-            구글
-            </p>
+            <p className="text-black font-medium">구글</p>
           </Button>
         </div>
         <div className="mt-6 text-center">
