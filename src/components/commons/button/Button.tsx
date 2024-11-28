@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, PropsWithChildren, Ref } from 'react';
+import { ButtonHTMLAttributes, forwardRef, PropsWithChildren, Ref } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, PropsWithChildren {
@@ -20,19 +20,24 @@ const bgColorClasses: Record<BgColor, string> = {
   filled: 'text-white',
 };
 
-const Button = ({ children, type = 'button', buttonSize, bgColor, onClick, className, disabled }: ButtonProps) => {
-  const buttonClass = twMerge(buttonSizeClasses[buttonSize], className);
-  const bgColorClass = bgColorClasses[bgColor];
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ children, type = 'button', buttonSize, bgColor, onClick, className, disabled }, ref) => {
+    const buttonClass = twMerge(buttonSizeClasses[buttonSize], className);
+    const bgColorClass = bgColorClasses[bgColor];
 
-  return (
-    <button
-      className={`${buttonClass} ${bgColorClass} whitespace-nowrap`}
-      type={type}
-      onClick={onClick}
-      disabled={disabled}>
-      {children}
-    </button>
-  );
-};
+    return (
+      <button
+        className={`${buttonClass} ${bgColorClass} whitespace-nowrap`}
+        type={type}
+        onClick={onClick}
+        ref={ref}
+        disabled={disabled}>
+        {children}
+      </button>
+    );
+  },
+);
+
+Button.displayName = 'Button';
 
 export default Button;
