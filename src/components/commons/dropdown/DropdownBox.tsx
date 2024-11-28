@@ -35,9 +35,10 @@ interface DropdownBoxProps {
   title?: string;
   className?: string;
   dropdownClassName?: string;
+  onChange?: (value: string) => void;
 }
 
-const DropdownBox = ({ dataType, title, className, dropdownClassName }: DropdownBoxProps) => {
+const DropdownBox = ({ dataType, title, className, dropdownClassName, onChange }: DropdownBoxProps) => {
   const { isOpen, toggleState } = useToggleHook();
   const itemRef = useRef<HTMLDivElement>(null);
   const exceptionRef = useRef<HTMLDivElement>(null);
@@ -65,13 +66,14 @@ const DropdownBox = ({ dataType, title, className, dropdownClassName }: Dropdown
   const handleItemClick = (value: string) => {
     setItem(value);
     toggleState();
+    onChange?.(value);
   };
 
   useOutsideClick(itemRef, toggleState, exceptionRef);
 
   return (
     <div className="relative">
-      <label htmlFor="introduction" className="mb-2 text-xl font-semibold">
+      <label htmlFor="introduction" className="mb-2 text-[20px] font-semibold">
         {title}
       </label>
 
@@ -87,10 +89,10 @@ const DropdownBox = ({ dataType, title, className, dropdownClassName }: Dropdown
           item ? (
             <span className="w-5 h-5 rounded-[9999px]" style={{ backgroundColor: item }} />
           ) : (
-            <p className="text-gray-a9 text-base">{title}</p>
+            <p className="text-gray-a9 text-[14px]">{title}</p>
           )
         ) : (
-          <p className={` ${item ? 'text-black text-[18px]' : 'text-gray-a9 text-base'}`}>{item || `${title}`}</p>
+          <p className={` ${item ? 'text-black text-[14px]' : 'text-gray-a9 text-[14px]'}`}>{item || `${title}`}</p>
         )}
       </div>
 
