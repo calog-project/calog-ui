@@ -11,9 +11,5 @@ export default function MainPageLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <html lang="ko">
-      <body>{children}</body>
-    </html>
-  );
+  return <div>{children}</div>;
 }
