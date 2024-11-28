@@ -36,7 +36,7 @@ export default function LoginPage() {
     try {
       console.log('로그인', data.email, data.password);
       const response = await fetch(`${process.env.NEXT_PUBLIC_CALOG_API_URL}/api/auth/login`, {
-        method: 'GET',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
