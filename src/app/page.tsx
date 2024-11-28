@@ -26,9 +26,11 @@ export default function Home() {
             <h1 className="text-[48px] font-bold">모든 일정을 한눈에, 함께하는 즐거움!</h1>
             <p className="text-[24px] font-semibold mb-[51px]">캘린더로 일정을 공유하고, 모임을 만들고, 소통하세요.</p>
 
-            <Button buttonSize="normal" bgColor="filled" className="w-[110px] h-[42px]  bg-blue-33 text-xl">
-              <Link href="/main">시작하기</Link>
-            </Button>
+            <Link href="/main">
+              <Button buttonSize="normal" bgColor="filled" className="w-[110px] h-[42px]  bg-blue-33 text-xl">
+                시작하기
+              </Button>
+            </Link>
           </div>
         </Section>
 
