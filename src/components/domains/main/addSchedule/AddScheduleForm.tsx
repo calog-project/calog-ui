@@ -1,4 +1,4 @@
-import { forwardRef, KeyboardEvent, useState } from 'react';
+import { ChangeEvent, forwardRef, KeyboardEvent, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { MdOutlineCancel, MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import DatePicker from 'react-datepicker';
@@ -25,7 +25,7 @@ interface AddScheduleForm {
   start: Date;
   end: Date;
   category?: string;
-  tag?: number[]; // 추후 number로 변경, 친구 태그로 변경 시 "joiner"로 필드명 변경 예정
+  tag?: number[]; // 친구 태그로 변경 시 "joiner"로 필드명 변경 예정
   description?: string;
 }
 
@@ -42,6 +42,11 @@ const AddScheduleForm = ({ handleModalClose }: AddScheduleFormProps) => {
   const [startTime, setStartTime] = useState<string | null>(null);
   const [endTime, setEndTime] = useState<string | null>(null);
   const [category, setCategory] = useState<string | null>(null);
+  const [inputCount, setInputCount] = useState<number>(0);
+
+  const handleOnInput = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setInputCount(e.target.value.length);
+  };
 
   const {
     control,
@@ -128,18 +133,23 @@ const AddScheduleForm = ({ handleModalClose }: AddScheduleFormProps) => {
   return (
     <form className="flex flex-col gap-[30px]" onSubmit={handleSubmit(onSubmit)}>
       {/* 입력한 글자수 표기 */}
-      <Input
-        title="제목"
-        type="text"
-        name="title"
-        inputSize="normal"
-        placeholder="제목"
-        register={register('title', {
-          required: '제목은 필수 입력값입니다.',
-        })}
-        error={errors.title}
-        className="h-[46px] text-[14px]"
-      />
+      <div>
+        <Input
+          title="제목"
+          type="text"
+          name="title"
+          inputSize="normal"
+          placeholder="제목"
+          register={register('title', {
+            required: '제목은 필수 입력값입니다.',
+          })}
+          onChange={handleOnInput}
+          error={errors.title}
+          className="h-[46px] text-[14px]"
+          maxLength={24}
+          inputCount={inputCount}
+        />
+      </div>
 
       <div className="w-[332px]">
         <label className="flex flex-col text-[20px] font-semibold">
@@ -268,7 +278,13 @@ const AddScheduleForm = ({ handleModalClose }: AddScheduleFormProps) => {
           id="memo"
           placeholder="메모를 입력해주세요"
           className="h-[143px] rounded-lg px-4 py-3 border border-gray-d9 focus:border-gray-98 focus:outline-none resize-none text-[14px]"
+          maxLength={500}
+          onChange={handleOnInput}
         />
+        <p className="flex justify-end text-[12px]">
+          <span>{inputCount}</span>
+          <span>/500</span>
+        </p>
       </div>
 
       <div className="flex gap-[20px]">
