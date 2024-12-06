@@ -17,7 +17,7 @@ const AddScheduleButton = () => {
   return (
     <>
       <AddScheduleModal openModal={addScheduleOpenModal} handleModalClose={addScheduleClose} />
-      <div className="fixed right-5 bottom-5 cursor-pointer z-10" onClick={addScheduleModalOpen}>
+      <div className="fixed right-10 bottom-14 cursor-pointer" onClick={addScheduleModalOpen}>
         <Image src={whiteCircle} alt="whiteCircle" />
         <div className="absolute inset-0 flex justify-center items-center">
           <Image src={plus} alt="plus" />

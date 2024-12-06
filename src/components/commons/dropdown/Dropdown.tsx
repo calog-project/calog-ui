@@ -1,4 +1,4 @@
-import { DropdownProps } from '@/app/types/DropdownType';
+import { DropdownProps } from '@/types/DropdownType';
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
 

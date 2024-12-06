@@ -5,10 +5,10 @@ import Button from '@/components/commons/button/Button';
 
 const Header = () => {
   return (
-    <header className="fixed top-0 right-0 left-0 bg-white shadow-custom py-2 z-50">
+    <header className="sticky top-0 right-0 left-0 bg-white shadow-custom py-2 z-50">
       <div className="relative flex items-center h-[64px] m-0 mx-auto max-w-[1400px] justify-between">
-        <Link href="/" className="text-[36px] font-bold">
-          Calog
+        <Link href="/" className="text-4xl font-bold">
+          <img src="/images/logo.svg" alt="로고" />
         </Link>
 
         <div className="flex gap-3">
