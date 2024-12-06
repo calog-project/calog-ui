@@ -4,9 +4,10 @@ import useOutsideClick from '@/hooks/useOutsideClick';
 import useToggleHook from '@/hooks/useToggleHook';
 import downArrow from '../../../../public/images/downArrow.svg';
 import upArrow from '../../../../public/images/upArrow.svg';
-import Dropdown from './Dropdown';
+
 import DropdownList from './DropdownList';
 import { twMerge } from 'tailwind-merge';
+import Dropdown from './Dropdown';
 
 // 추후에 분리
 export const CATEGORIES_DATA = {
