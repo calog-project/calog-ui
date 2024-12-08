@@ -4,7 +4,7 @@ import React from 'react';
 import useCalendar from '@/hooks/useCalendar';
 import { DAY_LIST } from '@/constants/calendar';
 import { getDayClass } from '@/utils/calendar';
-import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+import { MdArrowLeft, MdArrowRight } from 'react-icons/md';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 
@@ -19,10 +19,10 @@ const MiniCalendar: React.FC = () => {
         <h2 className="text-[14px] font-bold">{currentDate.format('YYYY년 MMM')}</h2>
         <div className="flex justify-between gap-4">
           <button onClick={goToPrevMonth} className="px-2 py-1 text-gray-98">
-            <IoIosArrowBack />
+            <MdArrowLeft className="w-[20px] h-[20px] text-black-17" />
           </button>
           <button onClick={goToNextMonth} className="px-2 py-1 text-gray-98">
-            <IoIosArrowForward />
+            <MdArrowRight className="w-[20px] h-[20px] text-black-17" />
           </button>
         </div>
       </header>
