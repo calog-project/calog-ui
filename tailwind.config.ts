@@ -32,7 +32,7 @@ const config: Config = {
           17: '#171717',
           33: '#333236',
           '4b': '#4B4B4B',
-          overlay: 'rgba(0, 0, 0, 0.70)', // 모달창 뒷 배경
+          overlay: 'rgba(0, 0, 0, 0.70)',
         },
         red: '#D6173A',
         green: '#7AC555',

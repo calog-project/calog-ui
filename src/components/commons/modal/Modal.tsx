@@ -11,15 +11,14 @@ interface ModalProps extends PropsWithChildren {
 }
 
 const Modal = ({ children, openModal, handleModalClose, className }: ModalProps) => {
-  const modalClass = twMerge(
-    'fixed top-1/2 left-1/2 bg-white rounded-lg z-50 transform -translate-x-1/2 -translate-y-1/2',
-    className,
-  );
+  const modalClass = twMerge('bg-white rounded-[10px] z-50', className);
 
   const open = 'block';
   return (
     <ModalPortal>
-      <div className="fixed left-0 top-0 z-[100] h-full w-full bg-black-overlay" onClick={handleModalClose}>
+      <div
+        className="fixed inset-0 py-10 mx-auto z-[1200] h-full w-full flex justify-center items-center bg-black-overlay"
+        onClick={handleModalClose}>
         <div onClick={(event) => event.stopPropagation()} className={`${modalClass} ${openModal ? open : ''}`}>
           {children}
         </div>
