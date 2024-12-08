@@ -38,6 +38,7 @@
 
   ::-webkit-scrollbar-track {
     background: #f1effd; /* 스크롤바 트랙의 배경 색상 */
+    border-radius: 8px;
   }
 
   .scrollbar-hide {
