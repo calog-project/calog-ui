@@ -6,7 +6,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import Image from 'next/image';
 import ImageCropModal from '@/components/imageCropModal/imageCropModal';
 import useModal from '@/hooks/useModal';
-import camera from '/public/images/camera.svg';
+import camera from 'images/camera.svg';
 
 interface InputProps {
   nickname: string;
