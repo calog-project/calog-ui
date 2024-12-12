@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
-import sectionOne from '../../public/images/section1.svg';
-import sectionSecond from '../../public/images/section2.svg';
-import sectionThird from '../../public/images/section3.svg';
+import sectionOne from 'images/section1.svg';
+import sectionSecond from 'images/section2.svg';
+import sectionThird from 'images/section3.svg';
 import AnimationSection from '@/components/commons/animationSection/AnimationSection';
 import Button from '@/components/commons/button/Button';
 import Header from '@/components/domains/landing/header/Header';
