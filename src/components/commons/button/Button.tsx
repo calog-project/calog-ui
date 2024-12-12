@@ -9,7 +9,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, PropsWith
 
 type ButtonSize = 'normal';
 
-type BgColor = 'ghost' | 'filled';
+type BgColor = 'ghost' | 'filled' | 'gray';
 
 const buttonSizeClasses = {
   normal: 'w-full rounded-lg',
@@ -18,6 +18,7 @@ const buttonSizeClasses = {
 const bgColorClasses: Record<BgColor, string> = {
   ghost: 'border border-gray-98',
   filled: 'text-white',
+  gray: 'bg-gray-98 text-white',
 };
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
