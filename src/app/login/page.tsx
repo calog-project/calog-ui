@@ -4,10 +4,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
-
-import KaKaoIcon from '../../../public/images/KaKaoIcon.svg';
-import GoogleIcon from '../../../public/images/GoogleIcon.svg';
-import useAuthStore from '@/stores/authStore';
+import { signIn } from 'next-auth/react';
+import KaKaoIcon from 'images/KaKaoIcon.svg';
+import GoogleIcon from 'images/GoogleIcon.svg';
 import Button from '@/components/commons/button/Button';
 import Input from '@/components/commons/input/Input';
 
@@ -32,34 +31,30 @@ export default function LoginPage() {
     setShowPassword((prev) => !prev);
   };
 
+  //기본 로그인
   const onSubmit: SubmitHandler<LoginForm> = async (data) => {
     try {
-      console.log('로그인', data.email, data.password);
-      const response = await fetch(`${process.env.NEXT_PUBLIC_CALOG_API_URL}/api/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+      const result = await signIn('credentials', {
+        email: data.email,
+        password: data.password,
+        redirect: false,
       });
 
-      if (!response.ok) {
-        throw new Error('로그인 실패');
+      if (result?.error) {
+        throw new Error(result.error);
       }
 
-      const result = await response.json();
-      const { email, accessToken } = result;
-
-      useAuthStore.getState().login(email, accessToken);
-      router.push('/');
+      if (result?.ok) {
+        router.push('/main');
+      }
     } catch (err) {
       console.error('로그인 에러', err);
-      throw new Error('로그인 실패');
     }
   };
 
+  //Oauth 로그인
   const handleOAuthLogin = async (provider: string) => {
-    window.location.href = `${process.env.NEXT_PUBLIC_CALOG_API_URL}/api/auth/${provider}`;
+    window.location.href = `${process.env.NEXT_PUBLIC_URL}/api/auth/${provider}`;
   };
 
   return (
@@ -95,10 +90,6 @@ export default function LoginPage() {
                 placeholder="비밀번호를 입력해 주세요."
                 register={register('password', {
                   required: '비밀번호는 필수 입력값입니다.',
-                  pattern: {
-                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-                    message: '비밀번호는 최소 8자, 하나 이상의 대문자, 소문자, 숫자 및 특수 문자를 포함해야 합니다.',
-                  },
                 })}
                 error={errors.password}
                 className="w-full pr-10"
@@ -106,7 +97,7 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={togglePasswordVisibility}
-                className="absolute inset-y-11 right-3 flex items-center justify-center text-gray-500 h-[50px]">
+                className="absolute inset-y-11 right-3 flex items-center justify-center text-gray-500 h-[42px]">
                 <Image
                   src={showPassword ? '/images/eyes-open.svg' : '/images/eyes.svg'}
                   alt={showPassword ? '비밀번호 숨기기' : '비밀번호 보기'}
@@ -152,7 +143,7 @@ export default function LoginPage() {
         </div>
         <div className="mt-6 text-center">
           아직 캘로그 회원이 아니신가요? {/* TODO 이후 href 회원가입 경로로 변경 */}
-          <Link href="/signup" className="text-blue-600 hover:underline">
+          <Link href="/register" className="text-blue-600 hover:underline">
             회원가입
           </Link>
         </div>
