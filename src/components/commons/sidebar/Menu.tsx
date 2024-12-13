@@ -41,6 +41,7 @@ const Menu = ({ isOpen }: TMenuProps) => {
           ) : (
             <button
               type="button"
+              key={menu?.name}
               className={`group flex items-center text-4 gap-5 font-medium mb-10 ${!isOpen ? 'p-2' : 'p-4'} hover:bg-blue-33 hover:text-white hover:rounded-md`}>
               <div>{React.createElement(LuLogOut, { size: '20' })}</div>
               <h2 className={`whitespace-pre duration-500 ${!isOpen && 'opacity-0 translate-x-28 overflow-hidden'}`}>
