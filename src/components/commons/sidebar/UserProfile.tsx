@@ -1,4 +1,5 @@
 import { FaUser } from 'react-icons/fa6';
+import Image from 'next/image';
 
 type TUserProfileProps = {
   user: {
@@ -14,7 +15,7 @@ const UserProfile = ({ user, isOpen }: TUserProfileProps) => {
 
   const renderProfileImage = () =>
     imgUrl ? (
-      <img src={imgUrl} alt="유저 프로필 이미지" className="w-full h-full rounded-full object-cover" />
+      <Image src={imgUrl} alt="유저 프로필 이미지" className="w-full h-full rounded-full object-cover" />
     ) : (
       <div className="flex justify-center items-center w-full h-full rounded-full bg-gray-d9">
         <FaUser className="text-white" size={isOpen ? 80 : 20} />
