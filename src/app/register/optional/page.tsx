@@ -6,7 +6,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import Image from 'next/image';
 import ImageCropModal from '@/components/imageCropModal/imageCropModal';
 import useModal from '@/hooks/useModal';
-import camera from 'images/camera.svg';
+import camera from '/public/images/camera.svg';
 
 interface InputProps {
   nickname: string;
@@ -89,7 +89,7 @@ const Register = () => {
           />
           <div className="flex mb-[25px]">
             <label className="w-[70px] h-[70px] flex items-center justify-center rounded-[4px]" htmlFor="profileImg">
-              <Image src={camera} alt="camera" width={70} height={70} />
+              <Image src={camera} alt="camera" />
             </label>
             <input
               className="hidden"
