@@ -5,8 +5,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { signIn } from 'next-auth/react';
-import KaKaoIcon from 'images/KaKaoIcon.svg';
-import GoogleIcon from 'images/GoogleIcon.svg';
+import KaKaoIcon from '/public/images/KaKaoIcon.svg';
+import GoogleIcon from '/public/images/GoogleIcon.svg';
 import Button from '@/components/commons/button/Button';
 import Input from '@/components/commons/input/Input';
 
