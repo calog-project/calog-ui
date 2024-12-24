@@ -16,7 +16,10 @@ const Popover = ({ items, onClose }: PopoverProps) => {
   return (
     <div
       ref={popoverRef}
-      className="absolute right-0 top-10 z-50 w-40 bg-white border border-gray-200 shadow-md rounded-md">
+      className="absolute right-0 top-10 z-50 w-40 bg-white border border-gray-200 shadow-md rounded-md"
+      onClick={(e: React.MouseEvent) => {
+        e.stopPropagation();
+      }}>
       <ul>
         {items.map((item, index) => (
           <li

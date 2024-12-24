@@ -2,13 +2,14 @@
 
 import Link from 'next/link';
 import Button from '@/components/commons/button/Button';
+import Image from 'next/image';
 
 const Header = () => {
   return (
     <header className="sticky top-0 right-0 left-0 bg-white shadow-custom py-2 z-50">
       <div className="relative flex items-center h-[64px] m-0 mx-auto max-w-[1400px] justify-between">
         <Link href="/" className="text-4xl font-bold">
-          <img src="/images/logo.svg" alt="로고" />
+          <Image src="/images/logo.svg" alt="로고" width={150} height={40} />
         </Link>
 
         <div className="flex gap-3">
