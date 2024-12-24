@@ -1,44 +1,27 @@
 'use client';
 
 import { usePagination } from '@/hooks/usePagination';
-import { useState } from 'react';
 import { MdArrowLeft, MdArrowRight } from 'react-icons/md';
-import { IoIosMore } from 'react-icons/io';
 import { CgAddR } from 'react-icons/cg';
-import Popover from '@/components/commons/popover/Popover';
 import { useCategoryStore } from '@/stores/categoryStore';
 import CategoryModal from './CategoryModal';
 import useModal from '@/hooks/useModal';
+import CategoryButton from './CategoryButton';
+import { TCategory } from '@/types/category';
 
-const defaultCategories = ['새로운 카테고리', '기본', '공유'];
-const customCategories = ['캘로그 회의', '술', '운동', '공부', '여행'];
-
-const Category = () => {
-  const ITEMS_PER_PAGE = 3;
+const Category = ({ categories }: { categories: TCategory[] }) => {
+  const ITEMS_PER_PAGE = 5;
   const { currentItems, currentPage, totalPages, goToNextPage, goToPrevPage } = usePagination(
-    customCategories,
+    categories,
     ITEMS_PER_PAGE,
   );
   const { selectedCategories, setSelectedCategories } = useCategoryStore();
-  const [isPopoverOpen, setPopoverOpen] = useState<number | null>(null);
+
   const {
     openModal: isOpenModal,
     handleModalClose: categoryFormModalClose,
     handleModalOpen: categoryFormModalOpen,
   } = useModal();
-
-  const [editCategory, setEditCategory] = useState<boolean>(false);
-
-  const popoverItems = [
-    {
-      label: '수정',
-      onClick: () => {
-        categoryFormModalOpen();
-        setEditCategory(true);
-      },
-    },
-    { label: '삭제', onClick: () => {} }, // 수정 예정
-  ];
 
   const handleCategoryClick = (category: string) => {
     if (selectedCategories.includes(category)) {
@@ -69,46 +52,19 @@ const Category = () => {
       </div>
       <div className="flex justify-center items-center gap-5 w-full">
         <div className="grid grid-cols-3 grid-rows-2 gap-[20px] w-full">
-          {defaultCategories.map((category, index) => (
-            <div
-              key={index}
-              className={`flex justify-center items-center w-full h-[70px] bg-white border rounded-[10px] text-center font-medium gap-[5px] cursor-pointer ${
-                selectedCategories.includes(category) ? 'border-blue-33' : 'border-gray-98'
-              }`}
-              onClick={() => {
-                category === '새로운 카테고리'
-                  ? (categoryFormModalOpen(), setEditCategory(false))
-                  : handleCategoryClick(category);
-              }}>
-              {category}
-              {category === '새로운 카테고리' && <CgAddR className="text-blue-33" />}
-            </div>
-          ))}
+          <div
+            className="flex justify-center items-center w-full h-[70px] bg-white border rounded-[10px] text-center font-medium gap-[5px] cursor-pointer border-gray-98"
+            onClick={() => {
+              categoryFormModalOpen();
+            }}>
+            새로운 카테고리
+            <CgAddR className="text-blue-33" />
+          </div>
           {isOpenModal && (
-            <CategoryModal
-              mode={editCategory ? 'edit' : 'add'}
-              categoryFormModalClose={categoryFormModalClose}
-              isOpenModal={isOpenModal}
-            />
+            <CategoryModal mode="add" categoryFormModalClose={categoryFormModalClose} isOpenModal={isOpenModal} />
           )}
-          {currentItems.map((category, index) => (
-            <div
-              key={index}
-              className={`relative flex justify-center items-center w-full h-[70px] bg-white border rounded-[10px] text-center font-medium gap-[5px] cursor-pointer ${
-                selectedCategories.includes(category) ? 'border-blue-33' : 'border-gray-98'
-              }`}
-              onClick={() => handleCategoryClick(category)}>
-              {category}
-              <button
-                className="absolute right-4 top-1 text-black"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setPopoverOpen((prevIndex) => (prevIndex === index ? null : index));
-                }}>
-                <IoIosMore className="w-8 h-8 font-bold" />
-              </button>
-              {isPopoverOpen === index && <Popover items={popoverItems} onClose={() => setPopoverOpen(null)} />}
-            </div>
+          {currentItems.map((category) => (
+            <CategoryButton key={category.id} category={category} handleCategoryClick={handleCategoryClick} />
           ))}
         </div>
       </div>
