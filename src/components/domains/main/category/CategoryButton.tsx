@@ -7,6 +7,7 @@ import { useCategoryStore } from '@/stores/categoryStore';
 import { TCategory } from '@/types/category';
 import useModal from '@/hooks/useModal';
 import CategoryModal from './CategoryModal';
+import { deleteCategory } from '@/actions/category';
 
 type TCategoryButtonProps = {
   handleCategoryClick: (category: string) => void;
@@ -14,7 +15,7 @@ type TCategoryButtonProps = {
 };
 
 const CategoryButton = ({ handleCategoryClick, category }: TCategoryButtonProps) => {
-  const { aggregateId, id, name } = category;
+  const { aggregateId, id: categoryId, name } = category;
   const [isPopoverOpen, setPopoverOpen] = useState<number | null>(null);
   const { selectedCategories } = useCategoryStore();
   const {
@@ -23,14 +24,29 @@ const CategoryButton = ({ handleCategoryClick, category }: TCategoryButtonProps)
     handleModalOpen: categoryFormModalOpen,
   } = useModal();
 
-  const popoverItems = [
+  const categoryPopoverItems = [
     {
       label: '수정',
       onClick: () => {
         categoryFormModalOpen();
       },
     },
-    { label: '삭제', onClick: () => {} },
+    {
+      label: '삭제',
+      onClick: async () => {
+        if (confirm('정말 삭제하시겠습니까?'))
+          try {
+            const isDeleted = await deleteCategory(categoryId);
+            if (isDeleted) {
+              alert('카테고리를 성공적으로 삭제했습니다.');
+            } else {
+              alert('카테고리 삭제를 실패했습니다.');
+            }
+          } catch (error) {
+            alert('삭제 중 에러가 발생했습니다.');
+          }
+      },
+    },
   ];
 
   return (
@@ -46,19 +62,19 @@ const CategoryButton = ({ handleCategoryClick, category }: TCategoryButtonProps)
             className="absolute right-4 top-1 text-black"
             onClick={(e) => {
               e.stopPropagation();
-              setPopoverOpen((prevId) => (prevId === id ? null : id));
+              setPopoverOpen((prevId) => (prevId === categoryId ? null : categoryId));
             }}>
             <IoIosMore className="w-8 h-8 font-bold" />
           </button>
         )}
-        {isPopoverOpen === id && <Popover items={popoverItems} onClose={() => setPopoverOpen(null)} />}
+        {isPopoverOpen === categoryId && <Popover items={categoryPopoverItems} onClose={() => setPopoverOpen(null)} />}
       </div>
       {isOpenModal && (
         <CategoryModal
           mode="edit"
           categoryFormModalClose={categoryFormModalClose}
           isOpenModal={isOpenModal}
-          categoryId={id}
+          categoryId={categoryId}
         />
       )}
     </>
