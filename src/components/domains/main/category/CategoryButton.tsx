@@ -18,17 +18,13 @@ const CategoryButton = ({ handleCategoryClick, category }: TCategoryButtonProps)
   const { aggregateId, id: categoryId, name } = category;
   const [isPopoverOpen, setPopoverOpen] = useState<number | null>(null);
   const { selectedCategories } = useCategoryStore();
-  const {
-    openModal: isOpenModal,
-    handleModalClose: categoryFormModalClose,
-    handleModalOpen: categoryFormModalOpen,
-  } = useModal();
+  const { openModal, handleModalClose, handleModalOpen } = useModal();
 
   const categoryPopoverItems = [
     {
       label: '수정',
       onClick: () => {
-        categoryFormModalOpen();
+        handleModalOpen();
       },
     },
     {
@@ -69,13 +65,8 @@ const CategoryButton = ({ handleCategoryClick, category }: TCategoryButtonProps)
         )}
         {isPopoverOpen === categoryId && <Popover items={categoryPopoverItems} onClose={() => setPopoverOpen(null)} />}
       </div>
-      {isOpenModal && (
-        <CategoryModal
-          mode="edit"
-          categoryFormModalClose={categoryFormModalClose}
-          isOpenModal={isOpenModal}
-          categoryId={categoryId}
-        />
+      {openModal && (
+        <CategoryModal mode="edit" handleModalClose={handleModalClose} openModal={openModal} categoryId={categoryId} />
       )}
     </>
   );

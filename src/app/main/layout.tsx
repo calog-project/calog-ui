@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import '@/style/globals.css';
-import Header from '@/components/domains/landing/header/Header';
 
 export const metadata: Metadata = {
   title: '메인 페이지',
@@ -12,10 +11,5 @@ export default function MainPageLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <>
-      <Header />
-      <section className="relative flex w-full h-full max-w-[1440px] mx-auto my-10">{children}</section>
-    </>
-  );
+  return <>{children}</>;
 }

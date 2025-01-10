@@ -15,7 +15,7 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div
+    <aside
       className={`h-dvh bg-white rounded-[8px] border border-gray-89 ${isOpen ? 'w-[200px]' : 'w-[60px]'} duration-500 text-gray-900 px-4`}>
       <div className={`py-3 flex mt-5 ${isOpen ? 'justify-end' : 'justify-center'}`}>
         <HiMenuAlt3 size={25} className="cursor-pointer" onClick={() => setIsOpen(!isOpen)} />
@@ -24,7 +24,7 @@ const Sidebar = () => {
         <UserProfile user={MOCK_USER} isOpen={isOpen} />
         <Menu isOpen={isOpen} />
       </div>
-    </div>
+    </aside>
   );
 };
 

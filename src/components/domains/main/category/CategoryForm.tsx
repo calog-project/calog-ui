@@ -1,14 +1,9 @@
 import { addCategory, editCategory } from '@/actions/category';
 import Button from '@/components/commons/button/Button';
+import { TCategoryProps } from '@/types/category';
 import { useState, useEffect } from 'react';
 
-type TCategoryProps = {
-  categoryFormModalClose: () => void;
-  mode: string;
-  categoryId?: number;
-};
-
-const CategoryForm = ({ categoryFormModalClose, mode, categoryId }: TCategoryProps) => {
+const CategoryForm = ({ handleModalClose, mode, categoryId }: TCategoryProps) => {
   const [name, setName] = useState('');
   const [color, setColor] = useState('#EFEFEF');
 
@@ -44,7 +39,7 @@ const CategoryForm = ({ categoryFormModalClose, mode, categoryId }: TCategoryPro
       } else {
         await editCategory(formData);
       }
-      categoryFormModalClose();
+      handleModalClose();
     } catch (error) {
       console.error(`${mode === 'add' ? '추가' : '수정'} 실패:`, error);
     }
@@ -93,7 +88,7 @@ const CategoryForm = ({ categoryFormModalClose, mode, categoryId }: TCategoryPro
           bgColor="ghost"
           buttonSize="normal"
           className="text-black-17 font-bold py-5 rounded-[5px]"
-          onClick={categoryFormModalClose}>
+          onClick={handleModalClose}>
           취소
         </Button>
         <Button
@@ -101,7 +96,7 @@ const CategoryForm = ({ categoryFormModalClose, mode, categoryId }: TCategoryPro
           bgColor="filled"
           buttonSize="normal"
           className="bg-blue-33 text-white font-bold py-5 rounded-[5px]">
-          {mode === 'add' ? '추가' : '수정'}
+          {mode === 'add' ? '작성' : mode === 'edit' ? '저장' : '수정'}
         </Button>
       </div>
     </form>

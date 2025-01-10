@@ -41,7 +41,7 @@ const MainCalendar = ({ schedules }: any) => {
       </div>
 
       <div className="w-full h-full grid grid-cols-7">
-        {weekCalendarList.flat().map((day, idx) => {
+        {weekCalendarList.flat().map((day) => {
           const isSunday = day.day() === 0;
           const isSaturday = day.day() === 6;
           const isCurrentMonth = day.isSame(currentDate, 'month');
@@ -55,27 +55,23 @@ const MainCalendar = ({ schedules }: any) => {
           const displayedSchedules = daySchedules.length > 4 ? [...daySchedules.slice(0, 3)] : daySchedules;
 
           return (
-            <>
-              <div
-                key={idx}
-                className="p-2 pb-5 grid grid-cols-1 grid-rows-5 gap-2 border border-gray-89 text-center cursor-pointer hover:bg-blue-76 hover:bg-opacity-10">
-                <span
-                  className={`flex ml-1 gap-1 font-medium text-[16px] ${getDayClass(isSunday, isSaturday)} ${!isCurrentMonth && 'opacity-20 text-gray-89'}`}>
-                  {day.date()}
-                </span>
-                {displayedSchedules.map((schedule: any) => (
-                  <div
-                    key={schedule}
-                    className={`w-full rounded ${!isCurrentMonth ? 'opacity-20 text-gray-89' : 'cursor-pointer'}`}
-                    style={{ backgroundColor: schedule.color }}>
-                    <span className="text-white text-center text-[16px]">{schedule.title}</span>
-                  </div>
-                ))}
-                {daySchedules.length > 4 && (
-                  <span className="text-gray-78 text-center text-[16px]">{moreSchedules}</span>
-                )}
-              </div>
-            </>
+            <div
+              key={day.format('YYYY-MM-DD')}
+              className="p-2 pb-5 grid grid-cols-1 grid-rows-5 gap-2 border border-gray-89 text-center cursor-pointer hover:bg-blue-76 hover:bg-opacity-10">
+              <span
+                className={`flex ml-1 gap-1 font-medium text-[16px] ${getDayClass(isSunday, isSaturday)} ${!isCurrentMonth && 'opacity-20 text-gray-89'}`}>
+                {day.date()}
+              </span>
+              {displayedSchedules.map((schedule: any) => (
+                <div
+                  key={schedule.id}
+                  className={`w-full rounded ${!isCurrentMonth ? 'opacity-20 text-gray-89' : 'cursor-pointer'}`}
+                  style={{ backgroundColor: schedule.color }}>
+                  <span className="text-white text-center text-[16px]">{schedule.title}</span>
+                </div>
+              ))}
+              {daySchedules.length > 4 && <span className="text-gray-78 text-center text-[16px]">{moreSchedules}</span>}
+            </div>
           );
         })}
       </div>

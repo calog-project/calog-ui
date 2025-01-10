@@ -31,6 +31,15 @@
     width: 8px;
   }
 
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
   ::-webkit-scrollbar-thumb {
     background-color: #112d4e; /* 스크롤바 핸들의 배경 색상 (Violet) */
     border-radius: 8px;
@@ -39,15 +48,6 @@
   ::-webkit-scrollbar-track {
     background: #f1effd; /* 스크롤바 트랙의 배경 색상 */
     border-radius: 8px;
-  }
-
-  .scrollbar-hide {
-    scrollbar-gutter: stable both-edges;
-  }
-
-  /* 스크롤바 숨김 */
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
   }
 
   /* 호버 시 스크롤바 표시 - WebKit 기반 브라우저용 */
@@ -75,7 +75,7 @@
 
   /* 호버 시 스크롤바 핸들 스타일 변경 */
   .scrollbar-hide:hover::-webkit-scrollbar-thumb {
-    background-color: #3f72af; /* 호버 시 스크롤바 핸들의 배경 색상을 어둡게 조정 */
+    background-color: rgba(118, 165, 234, 0.1); /* 호버 시 스크롤바 핸들의 배경 색상을 어둡게 조정 */
   }
 
   :root {
