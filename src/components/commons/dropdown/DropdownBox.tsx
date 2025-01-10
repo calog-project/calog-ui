@@ -4,35 +4,14 @@ import useOutsideClick from '@/hooks/useOutsideClick';
 import useToggleHook from '@/hooks/useToggleHook';
 import downArrow from '../../../../public/images/downArrow.svg';
 import upArrow from '../../../../public/images/upArrow.svg';
-
 import DropdownList from './DropdownList';
 import { twMerge } from 'tailwind-merge';
 import Dropdown from './Dropdown';
-
-// 추후에 분리
-export const CATEGORIES_DATA = {
-  project: '프로젝트',
-  job: '직장',
-};
-
-export const CATEGORIES_COLORS_DATA = {
-  blue: '#00FFF0',
-};
-
-// 주어진 시작 시간과 종료 시간 사이의 시간 슬롯 생성
-const generateTimeSlots = (startHour: number, endHour: number, interval: number) => {
-  const timeSlots = [];
-  for (let hour = startHour; hour <= endHour; hour++) {
-    for (let minute = 0; minute < 60; minute += interval) {
-      const time = `${hour}:${minute.toString().padStart(2, '0')}`;
-      timeSlots.push(time);
-    }
-  }
-  return timeSlots;
-};
+import { useCategoryStore } from '@/stores/categoryStore';
+import { generateTimeSlots } from '@/constants/generateTimeSlots';
 
 interface DropdownBoxProps {
-  dataType: string;
+  dataType: 'category' | 'time';
   title?: string;
   className?: string;
   dropdownClassName?: string;
@@ -41,33 +20,41 @@ interface DropdownBoxProps {
 
 const DropdownBox = ({ dataType, title, className, dropdownClassName, onChange }: DropdownBoxProps) => {
   const { isOpen, toggleState } = useToggleHook();
+  const { categories } = useCategoryStore();
   const itemRef = useRef<HTMLDivElement>(null);
   const exceptionRef = useRef<HTMLDivElement>(null);
 
-  const [item, setItem] = useState('');
+  const [item, setItem] = useState<{ name: string; color?: string; id?: string }>({ name: '' });
 
   const DropdownClass = twMerge(
-    'mt-2 flex cursor-pointer items-center gap-2 rounded-lg border border-solid border-gray-200 p-2 text-[18px]',
+    'mt-2 flex cursor-pointer justify-between items-center gap-2 rounded-lg border border-solid border-gray-200 py-2 px-3 text-[18px]',
     className,
   );
 
-  const timeSlots = generateTimeSlots(0, 23, 30); // 00AM to 11PM
+  const timeSlots = generateTimeSlots(0, 23, 30);
 
-  const categoryArray = Object.values(CATEGORIES_DATA);
-  const colorArray = Object.values(CATEGORIES_COLORS_DATA);
+  const categoryArray = categories.map((category) => ({
+    id: category.id,
+    name: category.name,
+    color: category.color,
+  }));
 
-  const dataMap: Record<string, string[]> = {
-    time: timeSlots,
+  const timeData = timeSlots.map((time) => ({
+    name: time,
+  }));
+
+  const dataMap: Record<string, any[]> = {
+    time: timeData,
     category: categoryArray,
-    color: colorArray,
   };
 
   const data = dataMap[dataType] || [];
 
   const handleItemClick = (value: string) => {
-    setItem(value);
+    const selectedItem = data.find((item) => item.name === value || item.id === value);
+    setItem(selectedItem || value);
     toggleState();
-    onChange?.(value);
+    onChange?.(String(value));
   };
 
   useOutsideClick(itemRef, toggleState, exceptionRef);
@@ -79,22 +66,23 @@ const DropdownBox = ({ dataType, title, className, dropdownClassName, onChange }
       </label>
 
       <div className={DropdownClass} onClick={toggleState} ref={exceptionRef}>
-        <div className="h-5 w-5 cursor-pointer">
-          {isOpen ? (
-            <Image src={upArrow} width={24} height={24} alt="드롭다운 닫기" priority />
-          ) : (
-            <Image src={downArrow} width={24} height={24} alt="드롭다운 열기" priority />
+        <div className={dataType === 'category' ? 'flex items-center gap-5' : ''}>
+          {dataType === 'category' && item.color && (
+            <span className="w-7 h-7 rounded-full" style={{ backgroundColor: item.color }} />
           )}
+          <span className={`text-[14px] ${item.name ? 'text-black font-medium' : 'text-gray-78'}`}>
+            {item.name || `${title}`}
+          </span>
         </div>
-        {dataType === 'color' ? (
-          item ? (
-            <span className="w-5 h-5 rounded-[9999px]" style={{ backgroundColor: item }} />
-          ) : (
-            <p className="text-gray-a9 text-[14px]">{title}</p>
-          )
-        ) : (
-          <p className={` ${item ? 'text-black text-[14px]' : 'text-gray-a9 text-[14px]'}`}>{item || `${title}`}</p>
-        )}
+        <div className="h-5 w-5 cursor-pointer">
+          <Image
+            src={isOpen ? upArrow : downArrow}
+            width={24}
+            height={24}
+            alt={isOpen ? '드롭다운 열기' : '드롭다운 닫기'}
+            priority
+          />
+        </div>
       </div>
 
       {isOpen && (
