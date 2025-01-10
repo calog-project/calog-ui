@@ -16,13 +16,13 @@ const Dropdown = ({ children, className, itemRef }: DropdownProps) => {
 
 const TextItem = ({ children, className, onClick }: DropdownProps) => {
   const DefaultTextItemClass =
-    'text-nowrap cursor-pointer p-2 text-gray-900 font-semibold hover:bg-gray-100 rounded text-[14px]';
+    'text-nowrap cursor-pointer p-2 text-gray-900 font-medium hover:bg-blue-76 hover:bg-opacity-10 rounded text-[14px]';
   const TextItemClass = twMerge(DefaultTextItemClass, className);
 
   return (
-    <p className={TextItemClass} onClick={onClick}>
+    <div className={TextItemClass} onClick={onClick}>
       {children}
-    </p>
+    </div>
   );
 };
 

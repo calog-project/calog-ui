@@ -1,9 +1,36 @@
-export type Schedule = {
+export type TScheduleProps = {
+  openModal?: boolean;
+  handleModalClose: () => void;
+  mode: 'add' | 'edit' | 'detail';
+};
+
+export type TSchedule = {
   author: number;
   title: string;
-  start: string;
-  end: string;
-  categoryId: number;
-  joiner: number[];
-  description: string;
+  date: Date;
+  start: Date;
+  end: Date;
+  category: string;
+  joiner?: string[];
+  description?: string;
+};
+
+export type TScheduleStore = {
+  title: string | null;
+  startDate: Date | null;
+  endDate: Date | null;
+  startTime: string | null;
+  endTime: string | null;
+  categoryId: string;
+  joiner: string[];
+  description: string | null;
+  setTitle: (title: string) => void;
+  setStartDate: (date: Date | null) => void;
+  setEndDate: (date: Date | null) => void;
+  setStartTime: (time: string | null) => void;
+  setEndTime: (time: string | null) => void;
+  setCategoryId: (id: string) => void;
+  setJoiner: (joiner: string[]) => void;
+  setDescription: (description: string | null) => void;
+  setScheduleFormReset: () => void;
 };

@@ -6,7 +6,7 @@ const ScheduleList = ({ schedules }: any) => {
         {schedules.map((schedule: any, idx: any) => (
           <div
             key={idx}
-            className={`flex gap-5 p-5 w-full rounded hover:bg-gray-98 hover:bg-opacity-10 cursor-pointer`}>
+            className={`flex gap-5 p-5 w-full rounded hover:bg-blue-76 hover:bg-opacity-10 cursor-pointer`}>
             <span className="w-2" style={{ backgroundColor: schedule.color }} />
             <div className="flex flex-col ">
               <span className="text-black text-[16px] font-semibold">{schedule.title}</span>

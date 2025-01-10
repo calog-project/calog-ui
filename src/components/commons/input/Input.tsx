@@ -10,6 +10,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   onChange?: ChangeEventHandler<HTMLInputElement>;
   inputCount?: number;
   maxLength?: number;
+  value?: string;
 }
 
 type InputSize = 'normal';
@@ -30,6 +31,7 @@ const Input = ({
   onChange,
   inputCount,
   maxLength,
+  value,
 }: InputProps) => {
   const inputClass = twMerge(inputClasses[inputSize], className);
   return (
@@ -46,13 +48,16 @@ const Input = ({
         onChange={onChange}
         className={`${inputClass} h-[50px] rounded-lg px-4 py-3 border border-gray-d9 focus:border-gray-98`}
         maxLength={maxLength}
+        value={value}
       />
       <div className={`flex ${error?.message ? 'justify-between' : 'justify-end'}`}>
         {error?.message && <span className="text-[14px] text-red">{error.message}</span>}
-        <p className="flex justify-end text-[12px]">
-          <span>{inputCount}</span>
-          <span>/{maxLength}</span>
-        </p>
+        {maxLength && (
+          <p className="flex justify-end text-[12px]">
+            <span>{inputCount}</span>
+            <span>/{maxLength}</span>
+          </p>
+        )}
       </div>
     </div>
   );
