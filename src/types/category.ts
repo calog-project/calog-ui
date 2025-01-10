@@ -1,3 +1,10 @@
+export type TCategoryProps = {
+  openModal?: boolean;
+  handleModalClose: () => void;
+  mode: 'add' | 'edit';
+  categoryId?: number;
+};
+
 export type TCategory = {
   aggregateId: string;
   id: number;
@@ -7,6 +14,8 @@ export type TCategory = {
 };
 
 export type TCategoryState = {
+  categories: TCategory[];
+  setCategories: (categories: TCategory[]) => void;
   selectedCategories: string[];
   setSelectedCategories: (categories: string[]) => void;
 };

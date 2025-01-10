@@ -17,11 +17,7 @@ const Category = ({ categories }: { categories: TCategory[] }) => {
   );
   const { selectedCategories, setSelectedCategories } = useCategoryStore();
 
-  const {
-    openModal: isOpenModal,
-    handleModalClose: categoryFormModalClose,
-    handleModalOpen: categoryFormModalOpen,
-  } = useModal();
+  const { openModal, handleModalClose, handleModalOpen } = useModal();
 
   const handleCategoryClick = (category: string) => {
     if (selectedCategories.includes(category)) {
@@ -54,15 +50,11 @@ const Category = ({ categories }: { categories: TCategory[] }) => {
         <div className="grid grid-cols-3 grid-rows-2 gap-[20px] w-full">
           <div
             className="flex justify-center items-center w-full h-[70px] bg-white border rounded-[10px] text-center font-medium gap-[5px] cursor-pointer border-gray-98"
-            onClick={() => {
-              categoryFormModalOpen();
-            }}>
+            onClick={handleModalOpen}>
             새로운 카테고리
             <CgAddR className="text-blue-33" />
           </div>
-          {isOpenModal && (
-            <CategoryModal mode="add" categoryFormModalClose={categoryFormModalClose} isOpenModal={isOpenModal} />
-          )}
+          {openModal && <CategoryModal mode="add" handleModalClose={handleModalClose} openModal={openModal} />}
           {currentItems.map((category) => (
             <CategoryButton key={category.id} category={category} handleCategoryClick={handleCategoryClick} />
           ))}

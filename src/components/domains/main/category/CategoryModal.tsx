@@ -1,21 +1,15 @@
 import Modal from '@/components/commons/modal/Modal';
 import CategoryForm from './CategoryForm';
+import { TCategoryProps } from '@/types/category';
 
-type TCategoryModalProps = {
-  isOpenModal: boolean;
-  categoryFormModalClose: () => void;
-  mode: 'add' | 'edit';
-  categoryId?: number;
-};
-
-const CategoryModal = ({ isOpenModal, categoryFormModalClose, mode, categoryId }: TCategoryModalProps) => {
-  if (!isOpenModal) {
+const CategoryModal = ({ openModal, handleModalClose, mode, categoryId }: TCategoryProps) => {
+  if (!openModal) {
     return null;
   }
 
   return (
-    <Modal openModal={isOpenModal} handleModalClose={categoryFormModalClose} className="p-10 rounded-[5px] w-[500px]">
-      <CategoryForm categoryFormModalClose={categoryFormModalClose} mode={mode} categoryId={categoryId} />
+    <Modal openModal={openModal} handleModalClose={handleModalClose} className="p-10 rounded-[5px] w-[500px]">
+      <CategoryForm handleModalClose={handleModalClose} mode={mode} categoryId={categoryId} />
     </Modal>
   );
 };
