@@ -21,14 +21,8 @@
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus {
-    -webkit-text-fill-color: #112d4e;
+    -webkit-text-fill-color: #3366fe;
     -webkit-box-shadow: 0 0 0px 1000px #fff inset;
-  }
-
-  ::-webkit-scrollbar {
-    display: block;
-    height: 8px;
-    width: 8px;
   }
 
   .scrollbar-hide {
@@ -40,42 +34,19 @@
     display: none;
   }
 
+  ::-webkit-scrollbar {
+    display: block;
+    width: 10px;
+  }
+
   ::-webkit-scrollbar-thumb {
-    background-color: #112d4e; /* 스크롤바 핸들의 배경 색상 (Violet) */
+    background-color: #3366fe;
     border-radius: 8px;
   }
 
   ::-webkit-scrollbar-track {
     background: #f1effd; /* 스크롤바 트랙의 배경 색상 */
     border-radius: 8px;
-  }
-
-  /* 호버 시 스크롤바 표시 - WebKit 기반 브라우저용 */
-  .scrollbar-hide:hover::-webkit-scrollbar {
-    display: block;
-    width: 8px;
-    height: 8px;
-  }
-
-  /* 호버 시 스크롤바 표시 - Firefox용 */
-  .scrollbar-hide:hover {
-    scrollbar-width: auto;
-  }
-
-  /* 스크롤바 트랙 스타일 */
-  .scrollbar-hide::-webkit-scrollbar-track {
-    background: #f1effd; /* 스크롤바 트랙의 배경 색상 */
-  }
-
-  /* 스크롤바 핸들 스타일 */
-  .scrollbar-hide::-webkit-scrollbar-thumb {
-    background-color: #112d4e; /* 스크롤바 핸들의 배경 색상 (Violet) */
-    border-radius: 8px;
-  }
-
-  /* 호버 시 스크롤바 핸들 스타일 변경 */
-  .scrollbar-hide:hover::-webkit-scrollbar-thumb {
-    background-color: rgba(118, 165, 234, 0.1); /* 호버 시 스크롤바 핸들의 배경 색상을 어둡게 조정 */
   }
 
   :root {

@@ -12,7 +12,7 @@ const ScheduleModal = ({ openModal, handleModalClose, mode }: TScheduleProps) =>
     <Modal
       openModal={openModal}
       handleModalClose={handleModalClose}
-      className="flex flex-col p-[30px] w-[670px] h-full overflow-scroll overflow-x-auto">
+      className="flex flex-col p-[30px] w-[670px] h-full overflow-scroll overflow-x-auto scrollbar-hide">
       <ScheduleForm handleModalClose={handleModalClose} mode={mode} />
     </Modal>
   );

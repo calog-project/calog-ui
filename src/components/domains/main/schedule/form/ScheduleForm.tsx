@@ -9,6 +9,7 @@ import Button from '@/components/commons/button/Button';
 import dayjs from 'dayjs';
 import { AddSchedule } from '@/actions/schedule';
 import ScheduleTitleField from './ScheduleTitleField';
+import { IoIosClose } from 'react-icons/io';
 
 const ScheduleForm = ({ handleModalClose, mode }: TScheduleProps) => {
   const {
@@ -62,7 +63,17 @@ const ScheduleForm = ({ handleModalClose, mode }: TScheduleProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col relative">
+      <button
+        className="absolute -top-10 -right-10 text-[40px] hover:opacity-80"
+        type="button"
+        onClick={() => {
+          handleModalClose();
+          reset();
+          setScheduleFormReset();
+        }}>
+        <IoIosClose />
+      </button>
       <ScheduleTitleField register={register} errors={errors} />
       <div className="flex flex-col gap-[30px]">
         <ScheduleDatePicker errors={errors} control={control} />
