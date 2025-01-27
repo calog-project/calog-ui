@@ -5,14 +5,50 @@ import { DAY_LIST } from '@/constants/calendar';
 import { getDayClass } from '@/utils/calendar';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import dayjs from 'dayjs';
-import isBetween from 'dayjs/plugin/isBetween';
 import 'dayjs/locale/ko';
+import isBetween from 'dayjs/plugin/isBetween';
+import { TCalendar } from '@/types/calendar';
+import { getLuminance } from '@/constants/getLuminance';
+import { useEffect } from 'react';
+import { fetchCalendar } from '@/actions/calendar';
+import { useCalendarStore } from '@/stores/calendarStore';
 
 dayjs.locale('ko');
 dayjs.extend(isBetween);
 
-const MainCalendar = ({ schedules }: any) => {
-  const { weekCalendarList, currentDate, goToNextMonth, goToPrevMonth } = useCalendar();
+const MainCalendar = ({ calendarData }: { calendarData: TCalendar }) => {
+  const { weekCalendarList, currentDate, setCurrentDate } = useCalendar();
+  const initialDate = dayjs().format('YYYY-MM-DD');
+  const { updateCalendarData, setUpdateCalendarData } = useCalendarStore();
+
+  const schedules = updateCalendarData.schedules;
+
+  const goToNextMonth = async () => {
+    const nextDate = currentDate.add(1, 'month');
+    setCurrentDate(nextDate);
+    const data = await fetchCalendar({ date: nextDate.format('YYYY-MM-DD') });
+    setUpdateCalendarData(data);
+  };
+
+  const goToPrevMonth = async () => {
+    const prevDate = currentDate.subtract(1, 'month');
+    setCurrentDate(prevDate);
+    const data = await fetchCalendar({ date: prevDate.format('YYYY-MM-DD') });
+    setUpdateCalendarData(data);
+  };
+
+  useEffect(() => {
+    const isAddedNewSchedule =
+      updateCalendarData.schedules.length > 0 &&
+      !dayjs(updateCalendarData.schedules[0].start).isSame(currentDate, 'day');
+
+    if (currentDate.format('YYYY-MM-DD') === initialDate) {
+      setUpdateCalendarData(calendarData);
+    } else if (isAddedNewSchedule) {
+      const firstScheduleStart = dayjs(updateCalendarData.schedules[0].start);
+      setCurrentDate(firstScheduleStart);
+    }
+  }, [calendarData, updateCalendarData.schedules, setUpdateCalendarData, setCurrentDate]);
 
   return (
     <div className="w-full h-full flex flex-col items-center gap-4 rounded-4 border border-gray-89 rounded-[8px] p-10">
@@ -47,12 +83,11 @@ const MainCalendar = ({ schedules }: any) => {
           const isCurrentMonth = day.isSame(currentDate, 'month');
 
           const daySchedules = schedules.filter((schedule: any) =>
-            day.isBetween(dayjs(schedule.startDate), dayjs(schedule.endDate), 'day', '[]'),
+            day.isBetween(dayjs(schedule.start), dayjs(schedule.end), 'day', '[]'),
           );
 
-          const moreSchedules = `+ ${daySchedules.length - 4}건`;
-
           const displayedSchedules = daySchedules.length > 4 ? [...daySchedules.slice(0, 3)] : daySchedules;
+          const moreSchedules = `+ ${daySchedules.length - 4}건`;
 
           return (
             <div
@@ -62,14 +97,19 @@ const MainCalendar = ({ schedules }: any) => {
                 className={`flex ml-1 gap-1 font-medium text-[16px] ${getDayClass(isSunday, isSaturday)} ${!isCurrentMonth && 'opacity-20 text-gray-89'}`}>
                 {day.date()}
               </span>
-              {displayedSchedules.map((schedule: any) => (
-                <div
-                  key={schedule.id}
-                  className={`w-full rounded ${!isCurrentMonth ? 'opacity-20 text-gray-89' : 'cursor-pointer'}`}
-                  style={{ backgroundColor: schedule.color }}>
-                  <span className="text-white text-center text-[16px]">{schedule.title}</span>
-                </div>
-              ))}
+              {displayedSchedules.map((schedule: any) => {
+                const luminance = getLuminance(schedule.categoryColor);
+                const textColor = luminance > 0.5 ? 'text-black' : 'text-white';
+
+                return (
+                  <div
+                    key={schedule.id}
+                    className={`w-full px-1 rounded truncate ${!isCurrentMonth ? 'opacity-20 text-gray-89' : 'cursor-pointer'}`}
+                    style={{ backgroundColor: schedule.categoryColor }}>
+                    <span className={`${textColor} text-center text-[16px]`}>{schedule.title}</span>
+                  </div>
+                );
+              })}
               {daySchedules.length > 4 && <span className="text-gray-78 text-center text-[16px]">{moreSchedules}</span>}
             </div>
           );

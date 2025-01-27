@@ -1,7 +1,7 @@
 import { TSchedule } from '@/types/schedule';
 import { getSession } from 'next-auth/react';
 
-export const AddSchedule = async (
+export const addSchedule = async (
   data: TSchedule,
   joiner: string[],
   startDateTime: string,
@@ -24,8 +24,6 @@ export const AddSchedule = async (
       joiner: joiner,
       description: data.description,
     };
-
-    console.log('폼 제출 데이터:', requestData);
 
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/schedule`, {
       method: 'POST',

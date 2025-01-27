@@ -5,14 +5,19 @@ export type TScheduleProps = {
 };
 
 export type TSchedule = {
+  aggregateId?: string;
+  id?: string;
   author: number;
   title: string;
-  date: Date;
+  date?: Date;
   start: Date;
   end: Date;
-  category: string;
+  categoryId: number;
   joiner?: string[];
   description?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  categoryColor?: string;
 };
 
 export type TScheduleStore = {

@@ -15,7 +15,7 @@ type TCategoryButtonProps = {
 };
 
 const CategoryButton = ({ handleCategoryClick, category }: TCategoryButtonProps) => {
-  const { aggregateId, id: categoryId, name } = category;
+  const { aggregateId, id: categoryId, name, color } = category;
   const [isPopoverOpen, setPopoverOpen] = useState<number | null>(null);
   const { selectedCategories } = useCategoryStore();
   const { openModal, handleModalClose, handleModalOpen } = useModal();
@@ -52,6 +52,7 @@ const CategoryButton = ({ handleCategoryClick, category }: TCategoryButtonProps)
           selectedCategories.includes(name) ? 'border-blue-33' : 'border-gray-98'
         }`}
         onClick={() => handleCategoryClick(name)}>
+        <span className="w-[20px] h-[20px] mr-2 rounded-full" style={{ backgroundColor: color }} />
         {name}
         {aggregateId === 'defaultPersonalCategory' || aggregateId === 'defaultSharedCategory' ? null : (
           <button
