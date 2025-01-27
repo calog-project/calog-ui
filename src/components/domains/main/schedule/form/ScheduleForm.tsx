@@ -7,9 +7,12 @@ import JoinerTagField from './JoinerTagField';
 import ScheduleMemoField from './ScheduleMemoField';
 import Button from '@/components/commons/button/Button';
 import dayjs from 'dayjs';
-import { AddSchedule } from '@/actions/schedule';
+import { addSchedule } from '@/actions/schedule';
 import ScheduleTitleField from './ScheduleTitleField';
 import { IoIosClose } from 'react-icons/io';
+import { fetchCalendar } from '@/actions/calendar';
+import useCalendar from '@/hooks/useCalendar';
+import { useCalendarStore } from '@/stores/calendarStore';
 
 const ScheduleForm = ({ handleModalClose, mode }: TScheduleProps) => {
   const {
@@ -29,6 +32,8 @@ const ScheduleForm = ({ handleModalClose, mode }: TScheduleProps) => {
     setCategoryId,
     setScheduleFormReset,
   } = useScheduleStore();
+  const { setCurrentDate } = useCalendar();
+  const { setUpdateCalendarData } = useCalendarStore();
 
   const {
     control,
@@ -44,16 +49,21 @@ const ScheduleForm = ({ handleModalClose, mode }: TScheduleProps) => {
     const startDateTime = dayjs(startDate)
       .hour(Number((startTime || '00:00').split(':')[0]))
       .minute(Number((startTime || '00:00').split(':')[1]))
-      .utc()
       .toISOString();
 
     const endDateTime = dayjs(endDate)
       .hour(Number((endTime || '00:00').split(':')[0]))
       .minute(Number((endTime || '00:00').split(':')[1]))
-      .utc()
       .toISOString();
 
-    if (mode === 'add') await AddSchedule(data, joiner, startDateTime, endDateTime, categoryId, setScheduleFormReset);
+    if (mode === 'add') {
+      await addSchedule(data, joiner, startDateTime, endDateTime, categoryId, setScheduleFormReset);
+      const updatedCalendarData = await fetchCalendar({
+        date: dayjs(startDateTime).format('YYYY-MM-DD'),
+      });
+      setCurrentDate(dayjs(startDateTime));
+      setUpdateCalendarData(updatedCalendarData);
+    }
     // if (mode === 'detail') await AddSchedule(data, joiner, startDateTime, endDateTime, categoryId, setScheduleFormReset);
     // if (mode === 'edit') await AddSchedule(data, joiner, startDateTime, endDateTime, categoryId, setScheduleFormReset);
 

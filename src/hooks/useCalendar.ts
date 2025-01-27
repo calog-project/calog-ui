@@ -50,6 +50,7 @@ const useCalendar = () => {
     weekCalendarList,
     prevDayList,
     currentDate,
+    setCurrentDate,
     today,
     goToNextMonth,
     goToPrevMonth,

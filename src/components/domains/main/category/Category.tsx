@@ -9,10 +9,10 @@ import useModal from '@/hooks/useModal';
 import CategoryButton from './CategoryButton';
 import { TCategory } from '@/types/category';
 
-const Category = ({ categories }: { categories: TCategory[] }) => {
+const Category = ({ categoriesData }: { categoriesData: TCategory[] }) => {
   const ITEMS_PER_PAGE = 5;
   const { currentItems, currentPage, totalPages, goToNextPage, goToPrevPage } = usePagination(
-    categories,
+    categoriesData,
     ITEMS_PER_PAGE,
   );
   const { selectedCategories, setSelectedCategories } = useCategoryStore();
