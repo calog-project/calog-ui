@@ -14,7 +14,7 @@ const MiniCalendar: React.FC = () => {
   const { weekCalendarList, currentDate, today, goToNextMonth, goToPrevMonth } = useCalendar();
 
   return (
-    <div className="w-[300px] h-[250px] flex flex-col items-center gap-4 rounded-[8px] border border-gray-89 p-4">
+    <div className="w-[250px] h-[250px] flex flex-col items-center gap-4 rounded-[8px] border border-gray-89 p-4">
       <header className="flex w-full justify-between items-center">
         <h2 className="text-[14px] font-bold">{currentDate.format('YYYY년 MMM')}</h2>
         <div className="flex justify-between gap-4">

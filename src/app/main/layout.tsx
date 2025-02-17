@@ -1,4 +1,5 @@
-import type { Metadata } from 'next';
+import Header from '@/components/domains/landing/header/Header';
+import { Metadata } from 'next';
 import '@/style/globals.css';
 
 export const metadata: Metadata = {
@@ -11,5 +12,10 @@ export default function MainPageLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <>{children}</>;
+  return (
+    <div className="w-full h-screen flex flex-col gap-10 mx-auto">
+      <Header />
+      {children}
+    </div>
+  );
 }
