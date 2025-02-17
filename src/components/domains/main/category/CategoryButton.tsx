@@ -48,7 +48,7 @@ const CategoryButton = ({ handleCategoryClick, category }: TCategoryButtonProps)
   return (
     <>
       <div
-        className={`relative flex justify-center items-center w-full h-[70px] bg-white border rounded-[10px] text-center font-medium gap-[5px] cursor-pointer ${
+        className={`relative flex justify-center items-center w-full h-[50px] bg-white border rounded-[10px] text-center font-medium gap-[5px] cursor-pointer ${
           selectedCategories.includes(name) ? 'border-blue-33' : 'border-gray-98'
         }`}
         onClick={() => handleCategoryClick(name)}>

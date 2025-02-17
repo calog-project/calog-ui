@@ -3,7 +3,7 @@
 import useCalendar from '@/hooks/useCalendar';
 import { DAY_LIST } from '@/constants/calendar';
 import { getDayClass } from '@/utils/calendar';
-import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+import { MdArrowLeft, MdArrowRight } from 'react-icons/md';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import isBetween from 'dayjs/plugin/isBetween';
@@ -51,16 +51,12 @@ const MainCalendar = ({ calendarData }: { calendarData: TCalendar }) => {
   }, [calendarData, updateCalendarData.schedules, setUpdateCalendarData, setCurrentDate]);
 
   return (
-    <div className="w-full h-full flex flex-col items-center gap-4 rounded-4 border border-gray-89 rounded-[8px] p-10">
+    <div className="w-full h-full flex flex-col items-center rounded-4 border border-gray-89 rounded-[8px] p-5">
       <header className="flex w-full justify-between items-center">
-        <div className="flex justify-between gap-4">
-          <button onClick={goToPrevMonth} className="px-2 py-1 text-gray-98">
-            <IoIosArrowBack />
-          </button>
+        <div className="flex items-center justify-between gap-4">
+          <MdArrowLeft onClick={goToPrevMonth} size={30} className="cursor-pointer" />
           <h1 className="text-[20px] font-bold">{currentDate.format('YYYY년 MMM')}</h1>
-          <button onClick={goToNextMonth} className="px-2 py-1 text-gray-98">
-            <IoIosArrowForward />
-          </button>
+          <MdArrowRight onClick={goToNextMonth} size={30} className="cursor-pointer" />
         </div>
       </header>
 
@@ -76,7 +72,7 @@ const MainCalendar = ({ calendarData }: { calendarData: TCalendar }) => {
         ))}
       </div>
 
-      <div className="w-full h-full grid grid-cols-7">
+      <div className="w-full h-full grid grid-cols-7 auto-rows-fr">
         {weekCalendarList.flat().map((day) => {
           const isSunday = day.day() === 0;
           const isSaturday = day.day() === 6;
@@ -86,15 +82,15 @@ const MainCalendar = ({ calendarData }: { calendarData: TCalendar }) => {
             day.isBetween(dayjs(schedule.start), dayjs(schedule.end), 'day', '[]'),
           );
 
-          const displayedSchedules = daySchedules.length > 4 ? [...daySchedules.slice(0, 3)] : daySchedules;
-          const moreSchedules = `+ ${daySchedules.length - 4}건`;
+          const displayedSchedules = daySchedules.length > 2 ? [...daySchedules.slice(0, 2)] : daySchedules;
+          const moreSchedules = `+ ${daySchedules.length - 2}건`;
 
           return (
             <div
               key={day.format('YYYY-MM-DD')}
-              className="p-2 pb-5 grid grid-cols-1 grid-rows-5 gap-2 border border-gray-89 text-center cursor-pointer hover:bg-blue-76 hover:bg-opacity-10">
+              className="p-2 flex flex-col gap-[3px] border border-gray-89 text-center hover:bg-blue-76 hover:bg-opacity-10">
               <span
-                className={`flex ml-1 gap-1 font-medium text-[16px] ${getDayClass(isSunday, isSaturday)} ${!isCurrentMonth && 'opacity-20 text-gray-89'}`}>
+                className={`flex ml-1 gap-1 font-medium text-[14px] ${getDayClass(isSunday, isSaturday)} ${!isCurrentMonth && 'opacity-20 text-gray-89'}`}>
                 {day.date()}
               </span>
               {displayedSchedules.map((schedule: any) => {
@@ -104,9 +100,9 @@ const MainCalendar = ({ calendarData }: { calendarData: TCalendar }) => {
                 return (
                   <div
                     key={schedule.id}
-                    className={`w-full px-1 rounded truncate ${!isCurrentMonth ? 'opacity-20 text-gray-89' : 'cursor-pointer'}`}
+                    className={`flex items-center w-full h-[20px] px-1 rounded overflow-hidden ${!isCurrentMonth ? 'opacity-20 text-gray-89' : 'cursor-pointer'}`}
                     style={{ backgroundColor: schedule.categoryColor }}>
-                    <span className={`${textColor} text-center text-[16px]`}>{schedule.title}</span>
+                    <span className={`${textColor} truncate text-center text-[14px]`}>{schedule.title}</span>
                   </div>
                 );
               })}

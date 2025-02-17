@@ -1,5 +1,3 @@
-import Header from '@/components/domains/landing/header/Header';
-import Sidebar from '@/components/commons/sidebar/Sidebar';
 import AddScheduleButton from '@/components/domains/main/schedule/form/AddScheduleButton';
 import MainCalendar from '@/components/domains/main/calendar/MainCalendar';
 import MiniCalendar from '@/components/domains/main/calendar/MiniCalendar';
@@ -14,18 +12,14 @@ export default async function MainPage() {
 
   return (
     <>
-      <Header />
-      <main className="relative flex w-full h-full max-w-[1440px] mx-auto my-10">
-        <Sidebar />
+      <main className="relative flex flex-1 w-full h-full px-10 pb-10">
+        <div className="flex flex-col gap-10">
+          <MiniCalendar />
+          <Category categoriesData={categoriesData} />
+        </div>
         <AddScheduleButton categoriesData={categoriesData} />
-        <div className="flex flex-1 flex-col w-full h-full px-10 gap-10">
-          <section className="flex justify-center items-center gap-10 w-full">
-            <MiniCalendar />
-            <Category categoriesData={categoriesData} />
-          </section>
-          <section className="flex gap-10 w-full h-full">
-            <MainCalendar calendarData={calendarData} />
-          </section>
+        <div className="w-full h-full pl-10 flex-grow">
+          <MainCalendar calendarData={calendarData} />
         </div>
       </main>
     </>
