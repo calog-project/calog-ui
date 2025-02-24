@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useOutsideClick from '@/hooks/useOutsideClick';
 import useToggleHook from '@/hooks/useToggleHook';
 import downArrow from '../../../../public/images/downArrow.svg';
@@ -15,31 +15,38 @@ interface DropdownBoxProps {
   title?: string;
   className?: string;
   dropdownClassName?: string;
+  value: string;
   onChange?: (value: string) => void;
 }
 
-const DropdownBox = ({ dataType, title, className, dropdownClassName, onChange }: DropdownBoxProps) => {
+const DropdownBox = ({ dataType, title, className, dropdownClassName, value, onChange }: DropdownBoxProps) => {
   const { isOpen, toggleState } = useToggleHook();
   const { categories } = useCategoryStore();
   const itemRef = useRef<HTMLDivElement>(null);
   const exceptionRef = useRef<HTMLDivElement>(null);
 
-  const [item, setItem] = useState<{ name: string; color?: string; id?: string }>({ name: '' });
+  const findItemByCategoryId = (id: string) => {
+    const selectedCategory = categories.find((category) => String(category.id) === id);
+    return selectedCategory
+      ? { name: selectedCategory.name, color: selectedCategory.color, id: String(selectedCategory.id) }
+      : { name: '', color: '', id: '' };
+  };
 
-  const DropdownClass = twMerge(
-    'mt-2 flex cursor-pointer justify-between items-center gap-2 rounded-lg border border-solid border-gray-200 py-2 px-3 text-[18px]',
-    className,
+  const findTimeSlotByValue = (value: string) => {
+    return { name: value || '' };
+  };
+
+  const [item, setItem] = useState<{ name: string; color?: string; id?: string }>(
+    dataType === 'category' ? findItemByCategoryId(value) : findTimeSlotByValue(value),
   );
 
-  const timeSlots = generateTimeSlots(0, 23, 30);
-
   const categoryArray = categories.map((category) => ({
-    id: category.id,
+    id: String(category.id),
     name: category.name,
     color: category.color,
   }));
 
-  const timeData = timeSlots.map((time) => ({
+  const timeData = generateTimeSlots(0, 23, 30).map((time) => ({
     name: time,
   }));
 
@@ -52,10 +59,14 @@ const DropdownBox = ({ dataType, title, className, dropdownClassName, onChange }
 
   const handleItemClick = (value: string) => {
     const selectedItem = data.find((item) => item.name === value || item.id === value);
-    setItem(selectedItem || value);
+    setItem(selectedItem || { name: value });
     toggleState();
-    onChange?.(String(value));
+    onChange?.(value);
   };
+
+  useEffect(() => {
+    setItem(dataType === 'category' ? findItemByCategoryId(value) : findTimeSlotByValue(value));
+  }, [value, dataType]);
 
   useOutsideClick(itemRef, toggleState, exceptionRef);
 
@@ -65,13 +76,20 @@ const DropdownBox = ({ dataType, title, className, dropdownClassName, onChange }
         {title}
       </label>
 
-      <div className={DropdownClass} onClick={toggleState} ref={exceptionRef}>
+      <div
+        className={twMerge(
+          'mt-2 flex cursor-pointer justify-between items-center gap-2 rounded-lg border border-solid border-gray-200 py-2 px-3 text-[18px]',
+          className,
+        )}
+        onClick={toggleState}
+        ref={exceptionRef}>
         <div className={dataType === 'category' ? 'flex items-center gap-5' : ''}>
           {dataType === 'category' && item.color && (
             <span className="w-7 h-7 rounded-full" style={{ backgroundColor: item.color }} />
           )}
-          <span className={`text-[14px] ${item.name ? 'text-black font-medium' : 'text-gray-78'}`}>
-            {item.name || `${title}`}
+          <span
+            className={`text-[14px] ${item.name === '시작 시간' || item.name === '종료 시간' ? 'text-gray-78' : 'text-black font-medium'} `}>
+            {item.name || title}
           </span>
         </div>
         <div className="h-5 w-5 cursor-pointer">
@@ -93,5 +111,4 @@ const DropdownBox = ({ dataType, title, className, dropdownClassName, onChange }
     </div>
   );
 };
-
 export default DropdownBox;

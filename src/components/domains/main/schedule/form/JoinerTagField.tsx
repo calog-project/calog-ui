@@ -1,7 +1,9 @@
 import { useScheduleStore } from '@/stores/scheduleStore';
+import { TSchedule } from '@/types/schedule';
+import { UseFormRegister } from 'react-hook-form';
 import { MdOutlineCancel } from 'react-icons/md';
 
-const JoinerTagField = ({}: {}) => {
+const JoinerTagField = ({ register }: { register: UseFormRegister<TSchedule> }) => {
   const { joiner, setJoiner } = useScheduleStore();
 
   const removeTag = (tagId: number) => {
@@ -40,6 +42,12 @@ const JoinerTagField = ({}: {}) => {
           type="text"
           placeholder={joiner.length == 0 ? '엔터를 입력하여 태그를 등록해 주세요.' : ''}
           className="py-3 h-[46px] flex-grow rounded-lg text-[14px] font-medium"
+          {...register('joiner', {
+            required: false,
+            onChange: (e) => {
+              handleKeyDown(e);
+            },
+          })}
           onKeyDown={handleKeyDown}
         />
       </div>

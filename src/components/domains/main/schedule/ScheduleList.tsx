@@ -33,8 +33,8 @@ const ScheduleList = ({ schedules, date }: { schedules: TSchedule[]; date: strin
                   setSeletedSchedule(schedule);
                 }}>
                 <span className="w-2" style={{ backgroundColor: schedule.categoryColor }} />
-                <div className="flex flex-col">
-                  <span className="text-black text-[16px] font-semibold">{schedule.title}</span>
+                <div className="flex flex-col overflow-hidden">
+                  <span className="text-black text-[16px] font-semibold truncate">{schedule.title}</span>
                   <div className="flex items-center gap-2">
                     <LuAlarmClock />
                     <span className="text-black text-[14px]">{formattedTime}</span>

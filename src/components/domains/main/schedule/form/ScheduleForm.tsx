@@ -7,14 +7,15 @@ import JoinerTagField from './JoinerTagField';
 import ScheduleMemoField from './ScheduleMemoField';
 import Button from '@/components/commons/button/Button';
 import dayjs from 'dayjs';
-import { addSchedule } from '@/actions/schedule';
+import { addSchedule, getScheduleDetail } from '@/actions/schedule';
 import ScheduleTitleField from './ScheduleTitleField';
 import { IoIosClose } from 'react-icons/io';
 import { fetchCalendar } from '@/actions/calendar';
 import useCalendar from '@/hooks/useCalendar';
 import { useCalendarStore } from '@/stores/calendarStore';
+import { useEffect } from 'react';
 
-const ScheduleForm = ({ handleModalClose, mode }: TScheduleProps) => {
+const ScheduleForm = ({ handleModalClose, mode, scheduleData }: TScheduleProps) => {
   const {
     title,
     setTitle,
@@ -34,6 +35,7 @@ const ScheduleForm = ({ handleModalClose, mode }: TScheduleProps) => {
   } = useScheduleStore();
   const { setCurrentDate } = useCalendar();
   const { setUpdateCalendarData } = useCalendarStore();
+  const scheduleId = scheduleData?.id;
 
   const {
     control,
@@ -45,16 +47,39 @@ const ScheduleForm = ({ handleModalClose, mode }: TScheduleProps) => {
     mode: 'onBlur',
   });
 
-  const onSubmit = async (data: TSchedule) => {
-    const startDateTime = dayjs(startDate)
-      .hour(Number((startTime || '00:00').split(':')[0]))
-      .minute(Number((startTime || '00:00').split(':')[1]))
-      .toISOString();
+  useEffect(() => {
+    const fetchScheduleDetail = async () => {
+      if (mode === 'detail' && scheduleId) {
+        const scheduleDetail = await getScheduleDetail(scheduleId);
 
-    const endDateTime = dayjs(endDate)
-      .hour(Number((endTime || '00:00').split(':')[0]))
-      .minute(Number((endTime || '00:00').split(':')[1]))
+        if (scheduleDetail) {
+          reset({
+            title: scheduleDetail.title,
+            joiner: scheduleDetail.joiner,
+            description: scheduleDetail.description,
+          });
+          setCategoryId(scheduleDetail.categoryId);
+          setStartDate(new Date(dayjs(scheduleDetail.start).format('YYYY-MM-DD')));
+          setEndDate(new Date(dayjs(scheduleDetail.end).format('YYYY-MM-DD')));
+          setStartTime(dayjs(scheduleDetail.start).format('HH:mm'));
+          setEndTime(dayjs(scheduleDetail.end).format('HH:mm'));
+        }
+      }
+    };
+
+    fetchScheduleDetail();
+  }, [mode, scheduleId, reset]);
+
+  const formatDateTime = (date: Date | null, time: string | null) => {
+    return dayjs(date)
+      .hour(Number((time || '00:00').split(':')[0]))
+      .minute(Number((time || '00:00').split(':')[1]))
       .toISOString();
+  };
+
+  const onSubmit = async (data: TSchedule) => {
+    const startDateTime = formatDateTime(startDate, startTime);
+    const endDateTime = formatDateTime(endDate, endTime);
 
     if (mode === 'add') {
       await addSchedule(data, joiner, startDateTime, endDateTime, categoryId, setScheduleFormReset);
@@ -64,8 +89,8 @@ const ScheduleForm = ({ handleModalClose, mode }: TScheduleProps) => {
       setCurrentDate(dayjs(startDateTime));
       setUpdateCalendarData(updatedCalendarData);
     }
+
     // if (mode === 'detail') await AddSchedule(data, joiner, startDateTime, endDateTime, categoryId, setScheduleFormReset);
-    // if (mode === 'edit') await AddSchedule(data, joiner, startDateTime, endDateTime, categoryId, setScheduleFormReset);
 
     reset();
     setScheduleFormReset();
@@ -88,7 +113,7 @@ const ScheduleForm = ({ handleModalClose, mode }: TScheduleProps) => {
       <div className="flex flex-col gap-[30px]">
         <ScheduleDatePicker errors={errors} control={control} />
         <ScheduleDropdowns />
-        <JoinerTagField />
+        <JoinerTagField register={register} />
         <ScheduleMemoField register={register} />
         <div className="flex justify-between w-full gap-10 mt-10">
           <Button
@@ -101,14 +126,14 @@ const ScheduleForm = ({ handleModalClose, mode }: TScheduleProps) => {
               reset();
               setScheduleFormReset();
             }}>
-            취소
+            {mode === 'add' ? '취소' : '삭제'}
           </Button>
           <Button
             type="submit"
             bgColor="filled"
             buttonSize="normal"
             className={`bg-blue-33 text-white font-bold py-5 rounded-[5px] ${!isValid && 'cursor-not-allowed bg-gray-ef !text-black-17'}`}>
-            {mode === 'add' ? '작성' : mode === 'edit' ? '저장' : '수정'}
+            {mode === 'add' ? '작성' : '수정'}
           </Button>
         </div>
       </div>

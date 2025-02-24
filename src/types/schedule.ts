@@ -1,16 +1,21 @@
 export type TScheduleProps = {
   openModal?: boolean;
   handleModalClose: () => void;
-  mode: 'add' | 'edit' | 'detail';
+  mode: 'add' | 'detail';
+  scheduleData?: TSchedule | null;
 };
 
 export type TSchedule = {
   aggregateId?: string;
-  id?: string;
+  id?: number;
   author: number;
   title: string;
   date?: Date;
   start: Date;
+  startDate?: Date | null;
+  startTime?: Date | null;
+  endDate?: string | null;
+  endTime?: string | null;
   end: Date;
   categoryId: number;
   joiner?: string[];
