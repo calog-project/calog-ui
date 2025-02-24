@@ -132,3 +132,28 @@ export async function deleteCategory(categoryId: number): Promise<boolean> {
     throw error;
   }
 }
+
+export async function getCategory({ categoryId }: { categoryId: number }): Promise<TCategory[]> {
+  const session = await getServerSession(authOptions);
+
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/category/${categoryId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `${session?.accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('카테고리 상세 정보를 불러오는 데 실패했습니다.');
+    }
+
+    const data = await response.json();
+    revalidatePath('/main');
+    return data.payload.data;
+  } catch (error) {
+    console.error('카테고리 상세 정보 불러오기 실패:', error);
+    throw error;
+  }
+}

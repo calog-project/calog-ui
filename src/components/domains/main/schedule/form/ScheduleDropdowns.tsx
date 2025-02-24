@@ -3,7 +3,7 @@ import { FiAlertCircle } from 'react-icons/fi';
 import { useScheduleStore } from '@/stores/scheduleStore';
 
 const ScheduleDropdowns = () => {
-  const { setStartTime, setEndTime, setCategoryId } = useScheduleStore();
+  const { startTime, endTime, categoryId, setStartTime, setEndTime, setCategoryId } = useScheduleStore();
 
   return (
     <>
@@ -14,6 +14,7 @@ const ScheduleDropdowns = () => {
             title="시작 시간"
             className="w-[180px] h-[46px]"
             dropdownClassName="w-[180px]"
+            value={startTime === null ? '시작 시간' : startTime}
             onChange={(value) => {
               setStartTime(value);
             }}
@@ -23,12 +24,13 @@ const ScheduleDropdowns = () => {
             title="종료 시간"
             className="w-[180px] h-[46px]"
             dropdownClassName="w-[180px]"
+            value={endTime === null ? '종료 시간' : endTime}
             onChange={(value) => setEndTime(value)}
           />
         </div>
         <div className="flex items-center ml-2 gap-2 text-[12px] text-gray-78">
           <FiAlertCircle className="text-[16px] font-medium text-red" />
-          <p>시간 미선택 시 하루 종일로 표시 됩니다.</p>
+          <p>시간 미선택 시 하루 종일(00:00 ~ 00:00)로 표시 됩니다.</p>
         </div>
       </div>
       <div className="flex gap-[11px]">
@@ -37,6 +39,7 @@ const ScheduleDropdowns = () => {
           title="카테고리"
           className="w-[180px] h-[46px]"
           dropdownClassName="w-[180px]"
+          value={categoryId}
           onChange={(value) => {
             setCategoryId(value);
           }}
