@@ -66,7 +66,6 @@ const Register = () => {
   return (
     <div className="w-full h-full">
       <div className="w-[603px] mx-auto p-[40px] flex flex-col">
-        <div className="w-full h-2 bg-blue-33 flex rounded-md" />
         <span className="mt-[80px] text-[32px] font-bold mx-auto">회원가입</span>
         <form className="mt-[40px] flex flex-col gap-[24px]" noValidate onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col">
