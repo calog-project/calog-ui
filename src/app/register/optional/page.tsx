@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Button from '@/components/commons/button/Button';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Image from 'next/image';
-import ImageCropModal from '@/components/imageCropModal/imageCropModal';
+import ImageCropModal from '@/components/commons/modal/imageCropModal/ImageCropModal';
 import useModal from '@/hooks/useModal';
 import camera from '/public/images/camera.svg';
 
