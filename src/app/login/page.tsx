@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -8,7 +9,6 @@ import { signIn } from 'next-auth/react';
 import KaKaoIcon from '/public/images/KaKaoIcon.svg';
 import GoogleIcon from '/public/images/GoogleIcon.svg';
 import Button from '@/components/commons/button/Button';
-import Input from '@/components/commons/input/Input';
 
 interface LoginForm {
   email: string;
@@ -21,12 +21,12 @@ export default function LoginPage() {
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<LoginForm>({
-    mode: 'onChange',
+    mode: 'onBlur',
   });
 
   const router = useRouter();
   const [showPassword, setShowPassword] = useState<boolean>(false);
-
+  const [loginError, setLoginError] = useState<string | null>(null);
   const togglePasswordVisibility = (): void => {
     setShowPassword((prev) => !prev);
   };
@@ -41,14 +41,13 @@ export default function LoginPage() {
       });
 
       if (result?.error) {
-        throw new Error(result.error);
-      }
-
-      if (result?.ok) {
+        setLoginError('이메일 또는 비밀번호를 확인하세요.');
+      } else if (result?.ok) {
         router.push('/main');
       }
     } catch (err) {
       console.error('로그인 에러', err);
+      setLoginError('로그인 중 오류가 발생했습니다.');
     }
   };
 
@@ -58,67 +57,67 @@ export default function LoginPage() {
   };
 
   return (
-    <section className="w-full h-screen flex items-center justify-center bg-gray-100 p-4 overflow-y-auto">
-      <div className="bg-white p-10 rounded-3xl shadow-lg w-[603px] h-[802px]">
-        <h2 className="text-[32px] font-extrabold mb-10 text-center leading-[48px] tracking-[-0.6px]">로그인</h2>
-        <form className="space-y-6 w-[523px] mx-auto" onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-col items-center space-y-9">
-            <div className="h-[83px] w-[523px]">
-              <Input
-                title="이메일"
-                inputSize="normal"
-                type="email"
-                name="email"
-                placeholder="이메일을 입력해 주세요."
-                register={register('email', {
-                  required: '이메일은 필수 입력값입니다.',
-                  pattern: {
-                    value: /^\S+@\S+$/i,
-                    message: '유효한 이메일 형식을 입력해 주세요.',
-                  },
-                })}
-                error={errors.email}
-                className="w-full"
-              />
-            </div>
-            <div className="relative w-[523px]">
-              <Input
-                title="비밀번호"
-                inputSize="normal"
-                type={showPassword ? 'text' : 'password'} // 비밀번호 필드 타입 동적 변경
-                name="password"
-                placeholder="비밀번호를 입력해 주세요."
-                register={register('password', {
-                  required: '비밀번호는 필수 입력값입니다.',
-                })}
-                error={errors.password}
-                className="w-full pr-10"
-              />
-              <button
-                type="button"
-                onClick={togglePasswordVisibility}
-                className="absolute inset-y-11 right-3 flex items-center justify-center text-gray-500 h-[42px]">
-                <Image
-                  src={showPassword ? '/images/eyes-open.svg' : '/images/eyes.svg'}
-                  alt={showPassword ? '비밀번호 숨기기' : '비밀번호 보기'}
-                  width={24}
-                  height={24}
-                />
-              </button>
-            </div>
-            <div className="h-[52px] w-[523px]">
-              <Button
-                buttonSize="normal"
-                bgColor="filled"
-                type="submit"
-                className={`w-full h-full ${!isValid ? 'bg-gray-200 text-gray-500 cursor-not-allowed opacity-80' : 'bg-blue-600 hover:bg-blue-700'}`}
-                disabled={!isValid}>
-                로그인
-              </Button>
-            </div>
+    <section className="w-full h-full">
+      <div className="w-[603px] mx-auto p-[40px] flex flex-col">
+        <h2 className="mt-[80px] text-[32px] font-bold mx-auto">로그인</h2>
+        <form className="mt-[40px] flex flex-col gap-[24px]" onSubmit={handleSubmit(onSubmit)}>
+          <div className="flex flex-col">
+            <label htmlFor="email" className="mb-2 font-bold">
+              이메일
+            </label>
+            <input
+              type="email"
+              placeholder="이메일을 입력하세요"
+              {...register('email', {
+                required: '이메일을 입력하세요',
+                pattern: {
+                  value: /\S+@\S+\.\S+/,
+                  message: '올바른 이메일 형식이 아닙니다.',
+                },
+              })}
+              className="h-[50px] grow rounded-lg px-4 py-3 border border-gray-d9 focus:border-gray-98"
+            />
+            <p className="text-[14px] mt-[4px] text-[#FF3B34]">
+              {errors.email && <span className="text-[14px] absolute text-red">{errors.email.message}</span>}
+            </p>
           </div>
+
+          <div className="flex flex-col relative">
+            <label htmlFor="password" className="mb-2 font-bold">
+              비밀번호
+            </label>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="비밀번호를 입력하세요"
+              {...register('password', {
+                required: '비밀번호를 입력하세요',
+              })}
+              className="h-[50px] grow rounded-lg px-4 py-3 border border-gray-d9 focus:border-gray-98"
+            />
+
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              className="absolute right-3 bottom-[-1px] flex items-center justify-center text-gray-500 h-[52px]">
+              <Image
+                src={showPassword ? '/images/eyes-open.svg' : '/images/eyes.svg'}
+                alt={showPassword ? '비밀번호 숨기기' : '비밀번호 보기'}
+                width={24}
+                height={24}
+              />
+            </button>
+          </div>
+
+          <div className="relative mx-auto">{loginError && <p className="text-[16px] text-red">{loginError}</p>}</div>
+
+          <button
+            className={`h-[52px] mt-[24px] w-full rounded-[4px] text-white ${isValid ? 'bg-blue-33' : 'bg-[#9FA6B2]'}`}
+            disabled={!isValid}
+            type="submit">
+            로그인
+          </button>
         </form>
-        <div className="relative flex items-center justify-between my-6 w-[523px] mx-auto">
+        <div className="relative flex items-center justify-between my-8 w-[523px] mx-auto">
           <hr className="w-[120px] h-px bg-gray-300" />
           <span className="px-3 text-gray-400 bg-white z-10">SNS 로그인</span>
           <hr className="w-[120px] h-px bg-gray-300" />
@@ -143,7 +142,7 @@ export default function LoginPage() {
         </div>
         <div className="mt-6 text-center">
           아직 캘로그 회원이 아니신가요? {/* TODO 이후 href 회원가입 경로로 변경 */}
-          <Link href="/register" className="text-blue-600 hover:underline">
+          <Link href="/register" className="text-blue-600 underline">
             회원가입
           </Link>
         </div>
