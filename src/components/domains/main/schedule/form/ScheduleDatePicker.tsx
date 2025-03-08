@@ -1,4 +1,4 @@
-import { Control, Controller, FieldErrors } from 'react-hook-form';
+import { Control, Controller, FieldErrors, UseFormSetValue } from 'react-hook-form';
 import dayjs from 'dayjs';
 import { ko } from 'date-fns/locale';
 import utc from 'dayjs/plugin/utc';
@@ -33,9 +33,11 @@ CustomInput.displayName = 'CustomInput';
 const ScheduleDatePicker = ({
   control,
   errors,
+  mode,
 }: {
   errors: FieldErrors<TSchedule>;
   control: Control<TSchedule, any>;
+  mode: 'add' | 'detail';
 }) => {
   const { startDate, setStartDate, endDate, setEndDate } = useScheduleStore();
 
@@ -45,7 +47,7 @@ const ScheduleDatePicker = ({
       <Controller
         control={control}
         name="date"
-        rules={{ required: '날짜는 필수 입력값입니다.' }}
+        rules={mode === 'add' ? { required: '날짜는 필수 입력값입니다.' } : {}}
         render={({ field: { onBlur, onChange } }) => {
           return (
             <DatePicker

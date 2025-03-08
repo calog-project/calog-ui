@@ -7,7 +7,7 @@ import JoinerTagField from './JoinerTagField';
 import ScheduleMemoField from './ScheduleMemoField';
 import Button from '@/components/commons/button/Button';
 import dayjs from 'dayjs';
-import { addSchedule, getScheduleDetail } from '@/actions/schedule';
+import { addSchedule, editSchedule, getScheduleDetail } from '@/actions/schedule';
 import ScheduleTitleField from './ScheduleTitleField';
 import { IoIosClose } from 'react-icons/io';
 import { fetchCalendar } from '@/actions/calendar';
@@ -17,8 +17,6 @@ import { useEffect } from 'react';
 
 const ScheduleForm = ({ handleModalClose, mode, scheduleData }: TScheduleProps) => {
   const {
-    title,
-    setTitle,
     joiner,
     setJoiner,
     startDate,
@@ -90,17 +88,20 @@ const ScheduleForm = ({ handleModalClose, mode, scheduleData }: TScheduleProps) 
       setUpdateCalendarData(updatedCalendarData);
     }
 
-    // if (mode === 'detail') await AddSchedule(data, joiner, startDateTime, endDateTime, categoryId, setScheduleFormReset);
-
-    reset();
-    setScheduleFormReset();
+    if (mode === 'detail' && scheduleId) {
+      await editSchedule(scheduleId, data, joiner, startDateTime, endDateTime, categoryId);
+      const updatedCalendarData = await fetchCalendar({
+        date: dayjs(startDateTime).format('YYYY-MM-DD'),
+      });
+      setUpdateCalendarData(updatedCalendarData);
+    }
     handleModalClose();
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col relative">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col relative w-full ">
       <button
-        className="absolute -top-10 -right-10 text-[40px] hover:opacity-80"
+        className="absolute z-100 -top-10 -right-10 text-[40px] hover:opacity-80"
         type="button"
         onClick={() => {
           handleModalClose();
@@ -111,7 +112,7 @@ const ScheduleForm = ({ handleModalClose, mode, scheduleData }: TScheduleProps) 
       </button>
       <ScheduleTitleField register={register} errors={errors} />
       <div className="flex flex-col gap-[30px]">
-        <ScheduleDatePicker errors={errors} control={control} />
+        <ScheduleDatePicker errors={errors} control={control} mode={mode} />
         <ScheduleDropdowns />
         <JoinerTagField register={register} />
         <ScheduleMemoField register={register} />
