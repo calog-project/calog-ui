@@ -8,9 +8,7 @@ const ScheduleModal = ({ openModal, handleModalClose, mode, scheduleData }: TSch
   }
 
   return (
-    <Modal
-      openModal={openModal}
-      className="flex flex-col p-[30px] w-[670px] h-full overflow-scroll overflow-x-auto scrollbar-hide">
+    <Modal openModal={openModal} className="flex flex-col p-[30px] w-[670px] h-full overflow-x-scroll scrollbar-hide">
       <ScheduleForm handleModalClose={handleModalClose} mode={mode} scheduleData={scheduleData} />
     </Modal>
   );

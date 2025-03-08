@@ -25,11 +25,12 @@ const DropdownBox = ({ dataType, title, className, dropdownClassName, value, onC
   const itemRef = useRef<HTMLDivElement>(null);
   const exceptionRef = useRef<HTMLDivElement>(null);
 
-  const findItemByCategoryId = (id: string) => {
-    const selectedCategory = categories.find((category) => String(category.id) === id);
-    return selectedCategory
-      ? { name: selectedCategory.name, color: selectedCategory.color, id: String(selectedCategory.id) }
-      : { name: '', color: '', id: '' };
+  const findItemByCategoryId = (value: string) => {
+    if (!categories.length) {
+      return { name: '기본', color: '#DDDDDD', id: '1' };
+    }
+    const selectedCategory = categories.find((category) => String(category.id) === String(value));
+    return selectedCategory ?? { name: '기본', color: '#DDDDDD', id: '1' };
   };
 
   const findTimeSlotByValue = (value: string) => {
@@ -66,7 +67,7 @@ const DropdownBox = ({ dataType, title, className, dropdownClassName, value, onC
 
   useEffect(() => {
     setItem(dataType === 'category' ? findItemByCategoryId(value) : findTimeSlotByValue(value));
-  }, [value, dataType]);
+  }, [value, dataType, categories]);
 
   useOutsideClick(itemRef, toggleState, exceptionRef);
 
@@ -83,15 +84,17 @@ const DropdownBox = ({ dataType, title, className, dropdownClassName, value, onC
         )}
         onClick={toggleState}
         ref={exceptionRef}>
-        <div className={dataType === 'category' ? 'flex items-center gap-5' : ''}>
-          {dataType === 'category' && item.color && (
-            <span className="w-7 h-7 rounded-full" style={{ backgroundColor: item.color }} />
-          )}
+        {dataType === 'category' ? (
+          <div className="flex items-center gap-5">
+            {item.color ? <span className="w-7 h-7 rounded-full" style={{ backgroundColor: item.color }} /> : null}
+            <span className="text-black text-[14px]">{item.name}</span>
+          </div>
+        ) : (
           <span
-            className={`text-[14px] ${item.name === '시작 시간' || item.name === '종료 시간' ? 'text-gray-78' : 'text-black font-medium'} `}>
+            className={`text-[14px] ${item.name === '시작 시간' || item.name === '종료 시간' ? 'text-gray-78' : 'text-black font-medium'}`}>
             {item.name || title}
           </span>
-        </div>
+        )}
         <div className="h-5 w-5 cursor-pointer">
           <Image
             src={isOpen ? upArrow : downArrow}
@@ -111,4 +114,5 @@ const DropdownBox = ({ dataType, title, className, dropdownClassName, value, onC
     </div>
   );
 };
+
 export default DropdownBox;
