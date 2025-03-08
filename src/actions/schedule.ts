@@ -35,7 +35,7 @@ export const addSchedule = async (
     });
 
     if (!response.ok) {
-      throw new Error('일정 추가 실패');
+      alert('일정 작성을 실패하였습니다.');
     }
 
     await response.json();
@@ -63,7 +63,7 @@ export const getScheduleDetail = async (scheduleId: number) => {
     });
 
     if (!response.ok) {
-      throw new Error('일정 추가 실패');
+      alert('일정 상세 정보를 불러오는 데 실패하였습니다.');
     }
 
     const data = await response.json();
@@ -108,12 +108,38 @@ export const editSchedule = async (
     });
 
     if (!response.ok) {
-      throw new Error('일정 수정 실패');
+      alert('일정 수정을 실패하였습니다.');
     }
 
     await response.json();
   } catch (error) {
     console.error('일정 수정 에러', error);
     alert('일정 수정을 실패하였습니다.');
+  }
+};
+
+export const deleteSchedule = async (scheduleId: number) => {
+  try {
+    const session = await getSession();
+    if (!session || !session.user || !session.user.id) {
+      throw new Error('로그인된 사용자가 아닙니다.');
+    }
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/schedule/${scheduleId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `${session?.accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      alert('일정 삭제를 실패하였습니다.');
+    }
+
+    await response.json();
+  } catch (error) {
+    console.error('일정 삭제 에러', error);
+    alert('일정 삭제를 실패하였습니다.');
   }
 };

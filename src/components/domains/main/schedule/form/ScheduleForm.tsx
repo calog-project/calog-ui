@@ -7,7 +7,7 @@ import JoinerTagField from './JoinerTagField';
 import ScheduleMemoField from './ScheduleMemoField';
 import Button from '@/components/commons/button/Button';
 import dayjs from 'dayjs';
-import { addSchedule, editSchedule, getScheduleDetail } from '@/actions/schedule';
+import { addSchedule, deleteSchedule, editSchedule, getScheduleDetail } from '@/actions/schedule';
 import ScheduleTitleField from './ScheduleTitleField';
 import { IoIosClose } from 'react-icons/io';
 import { fetchCalendar } from '@/actions/calendar';
@@ -18,7 +18,7 @@ import { useEffect } from 'react';
 const ScheduleForm = ({ handleModalClose, mode, scheduleData }: TScheduleProps) => {
   const {
     joiner,
-    setJoiner,
+    // setJoiner, 추후 기능 구현 예정
     startDate,
     setStartDate,
     endDate,
@@ -89,6 +89,8 @@ const ScheduleForm = ({ handleModalClose, mode, scheduleData }: TScheduleProps) 
     }
 
     if (mode === 'detail' && scheduleId) {
+      const confirmEdit = confirm('해당 일정을 수정하시겠습니까?');
+      if (!confirmEdit) return;
       await editSchedule(scheduleId, data, joiner, startDateTime, endDateTime, categoryId);
       const updatedCalendarData = await fetchCalendar({
         date: dayjs(startDateTime).format('YYYY-MM-DD'),
@@ -122,10 +124,23 @@ const ScheduleForm = ({ handleModalClose, mode, scheduleData }: TScheduleProps) 
             bgColor="ghost"
             buttonSize="normal"
             className="text-black-17 font-bold py-5 rounded-[5px]"
-            onClick={() => {
-              handleModalClose();
-              reset();
-              setScheduleFormReset();
+            onClick={async () => {
+              if (mode === 'detail' && scheduleId) {
+                const confirmDelete = confirm('해당 일정을 삭제하시겠습니까?');
+                if (!confirmDelete) return;
+
+                await deleteSchedule(scheduleId);
+
+                const updatedCalendarData = await fetchCalendar({
+                  date: dayjs(startDate).format('YYYY-MM-DD'),
+                });
+                setUpdateCalendarData(updatedCalendarData);
+                handleModalClose();
+              } else {
+                handleModalClose();
+                reset();
+                setScheduleFormReset();
+              }
             }}>
             {mode === 'add' ? '취소' : '삭제'}
           </Button>
