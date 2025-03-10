@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { TSchedule } from '@/types/schedule';
 import { LuAlarmClock } from 'react-icons/lu';
 import dayjs from 'dayjs';

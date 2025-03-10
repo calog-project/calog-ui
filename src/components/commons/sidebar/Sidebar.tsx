@@ -1,6 +1,5 @@
 'use client';
 
-import MiniCalendar from '@/components/domains/main/calendar/MiniCalendar';
 import Menu from './Menu';
 import UserProfile from './UserProfile';
 

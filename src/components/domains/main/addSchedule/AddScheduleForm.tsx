@@ -242,7 +242,7 @@ const AddScheduleForm = ({ handleModalClose }: AddScheduleFormProps) => {
           dropdownClassName="w-[166px]"
           onChange={(value) => setCategory(value)}
         />
-        <DropdownBox dataType="color" title="색상" className="w-[166px] h-[46px]" dropdownClassName="w-[166px]" />
+        <DropdownBox dataType="category" title="색상" className="w-[166px] h-[46px]" dropdownClassName="w-[166px]" />
       </div>
 
       {/* 태그 최대개수 제한 논의 */}

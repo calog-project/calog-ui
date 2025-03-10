@@ -1,0 +1,61 @@
+name: deploy to S3
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  S3_BUCKET_NAME: chagok-bucket
+  CODE_DEPLOY_APPLICATION_NAME: chagok-code-deploy
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: chagok
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # 프로젝트 빌드
+      - name: Build next app
+        run: npm run build
+
+      # 프로젝트 압축
+      - name: Make zip file
+        run: zip -qq -r ./chagok.zip . -x "node_modules/*"
+        # -qq: quit 모드로 실행 (에러나 경고메세지만 출력하도록 함)
+        # -r: 지정된 디렉토리를 재귀적으로 압축 (하위 디렉토리와 파일들 모두 압축)
+        # -x "node_modules/*": node_modules 폴더 제외
+
+      # Github Action에서 AWS의 권한 자격을 얻어오는 단계
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      # 압축된 파일을 S3에 업로드
+      - name: Upload to S3
+        run: aws s3 cp --region ap-northeast-2 ./chagok.zip s3://$S3_BUCKET_NAME/chagok.zip
+
+      # S3에 업로드 된 빌드 파일을 이용해 CodeDeploy가 정의된 동작을 하도록 트리거
+      - name: Code Deploy
+        run: |
+          aws deploy create-deployment \
+          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+          --deployment-config-name CodeDeployDefault.AllAtOnce \
+          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
+          --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=chagok.zip

@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import useCalendar from '@/hooks/useCalendar';
 import { DAY_LIST } from '@/constants/calendar';
 import { getDayClass } from '@/utils/calendar';
@@ -55,7 +57,7 @@ const MainCalendar = ({ calendarData }: { calendarData: TCalendar }) => {
     if (currentDate.format('YYYY-MM-DD') === initialDate) {
       setUpdateCalendarData(calendarData);
     }
-  }, [calendarData, updateCalendarData.schedules, setUpdateCalendarData, setCurrentDate]);
+  }, [calendarData, updateCalendarData.schedules, setUpdateCalendarData, setCurrentDate, currentDate, initialDate]);
 
   const selectedDateSchedules = schedules.filter((schedule: any) =>
     dayjs(selectedDate).isBetween(dayjs(schedule.start), dayjs(schedule.end), 'day', '[]'),
