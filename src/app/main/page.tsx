@@ -11,17 +11,15 @@ export default async function MainPage() {
   const calendarData = await fetchCalendar({ date: dayjs().format('YYYY-MM-DD') });
 
   return (
-    <>
-      <main className="relative flex flex-1 w-full h-full px-10 pb-10">
-        <div className="flex flex-col gap-10">
-          <MiniCalendar />
-          <Category categoriesData={categoriesData} />
-        </div>
-        <AddScheduleButton categoriesData={categoriesData} />
-        <div className="w-full h-full pl-10 flex-grow">
-          <MainCalendar calendarData={calendarData} />
-        </div>
-      </main>
-    </>
+    <main className="relative flex flex-1 w-full h-full px-10 pb-10">
+      <div className="flex flex-col gap-10">
+        <MiniCalendar />
+        <Category categoriesData={categoriesData} />
+      </div>
+      <AddScheduleButton categoriesData={categoriesData} />
+      <div className="w-full h-full pl-10 flex-grow">
+        <MainCalendar calendarData={calendarData} />
+      </div>
+    </main>
   );
 }

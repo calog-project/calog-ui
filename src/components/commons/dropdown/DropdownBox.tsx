@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import useOutsideClick from '@/hooks/useOutsideClick';
@@ -67,7 +69,7 @@ const DropdownBox = ({ dataType, title, className, dropdownClassName, value, onC
 
   useEffect(() => {
     setItem(dataType === 'category' ? findItemByCategoryId(value) : findTimeSlotByValue(value));
-  }, [value, dataType, categories]);
+  }, [value, dataType, categories, findItemByCategoryId]);
 
   useOutsideClick(itemRef, toggleState, exceptionRef);
 
