@@ -1,6 +1,6 @@
 'use server';
 
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/[...nextauth]/lib/authOption';
 import { TCategory } from '@/types/category';
 import { getServerSession } from 'next-auth';
 import { revalidatePath } from 'next/cache';
