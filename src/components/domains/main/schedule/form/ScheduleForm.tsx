@@ -66,7 +66,7 @@ const ScheduleForm = ({ handleModalClose, mode, scheduleData }: TScheduleProps) 
     };
 
     fetchScheduleDetail();
-  }, [mode, scheduleId, reset, setCategoryId, setStartDate, setEndDate, setStartTime, setEndTime]);
+  }, [mode, scheduleId, reset]);
 
   const formatDateTime = (date: Date | null, time: string | null) => {
     return dayjs(date)

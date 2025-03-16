@@ -57,7 +57,7 @@ const MainCalendar = ({ calendarData }: { calendarData: TCalendar }) => {
     if (currentDate.format('YYYY-MM-DD') === initialDate) {
       setUpdateCalendarData(calendarData);
     }
-  }, [calendarData, updateCalendarData.schedules, setUpdateCalendarData, setCurrentDate, currentDate, initialDate]);
+  }, [calendarData, updateCalendarData.schedules, setUpdateCalendarData, setCurrentDate]);
 
   const selectedDateSchedules = schedules.filter((schedule: any) =>
     dayjs(selectedDate).isBetween(dayjs(schedule.start), dayjs(schedule.end), 'day', '[]'),
