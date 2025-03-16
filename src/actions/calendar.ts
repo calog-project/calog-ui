@@ -1,6 +1,6 @@
 'use server';
 
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/[...nextauth]/lib/authOption';
 import { TCalendar } from '@/types/calendar';
 import { TCategory } from '@/types/category';
 import { TSchedule } from '@/types/schedule';
