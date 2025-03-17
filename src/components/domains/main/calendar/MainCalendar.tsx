@@ -10,21 +10,21 @@ import { BiListUl } from 'react-icons/bi';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import isBetween from 'dayjs/plugin/isBetween';
-import { TCalendar } from '@/types/calendar';
 import { getLuminance } from '@/constants/getLuminance';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { fetchCalendar } from '@/actions/calendar';
 import { useCalendarStore } from '@/stores/calendarStore';
 import ScheduleList from '../schedule/ScheduleList';
+import { useScheduleStore } from '@/stores/scheduleStore';
 
 dayjs.locale('ko');
 dayjs.extend(isBetween);
 
-const MainCalendar = ({ calendarData }: { calendarData: TCalendar }) => {
+const MainCalendar = () => {
   const { weekCalendarList, currentDate, setCurrentDate } = useCalendar();
-  const initialDate = dayjs().format('YYYY-MM-DD');
   const { updateCalendarData, setUpdateCalendarData } = useCalendarStore();
-  const [selectedDate, setSelectedDate] = useState<string>(initialDate);
+  const { startDate } = useScheduleStore();
+  const [selectedDate, setSelectedDate] = useState<string>(currentDate.format('YYYY-MM-DD'));
   const [isListOpen, setIsListOpen] = useState(false);
 
   const schedules = updateCalendarData.schedules;
@@ -35,9 +35,6 @@ const MainCalendar = ({ calendarData }: { calendarData: TCalendar }) => {
 
     const firstDayOfNextMonth = nextDate.startOf('month').format('YYYY-MM-DD');
 
-    const data = await fetchCalendar({ date: firstDayOfNextMonth });
-
-    setUpdateCalendarData(data);
     setSelectedDate(firstDayOfNextMonth);
   };
 
@@ -47,17 +44,35 @@ const MainCalendar = ({ calendarData }: { calendarData: TCalendar }) => {
 
     const firstDayOfPrevMonth = prevDate.startOf('month').format('YYYY-MM-DD');
 
-    const data = await fetchCalendar({ date: firstDayOfPrevMonth });
-
-    setUpdateCalendarData(data);
     setSelectedDate(firstDayOfPrevMonth);
   };
 
+  const previousStartDate = useRef<string | null>(null);
+
   useEffect(() => {
-    if (currentDate.format('YYYY-MM-DD') === initialDate) {
-      setUpdateCalendarData(calendarData);
+    if (!dayjs(startDate).format() || !dayjs(startDate).isValid()) {
+      return;
     }
-  }, [calendarData, updateCalendarData.schedules, setUpdateCalendarData, setCurrentDate]);
+
+    if (
+      !previousStartDate.current ||
+      (previousStartDate.current !== dayjs(startDate).format('YYYY-MM-DD') &&
+        currentDate.format('YYYY-MM') !== dayjs(startDate).format('YYYY-MM'))
+    ) {
+      setCurrentDate(dayjs(startDate).startOf('month'));
+    }
+
+    previousStartDate.current = dayjs(startDate).format('YYYY-MM-DD');
+  }, [startDate]);
+
+  useEffect(() => {
+    const fetchAndSetCalendarData = async () => {
+      const data = await fetchCalendar({ date: currentDate.format('YYYY-MM-DD') });
+      setUpdateCalendarData(data);
+    };
+
+    fetchAndSetCalendarData();
+  }, [currentDate]);
 
   const selectedDateSchedules = schedules.filter((schedule: any) =>
     dayjs(selectedDate).isBetween(dayjs(schedule.start), dayjs(schedule.end), 'day', '[]'),
