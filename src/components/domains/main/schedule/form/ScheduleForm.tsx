@@ -82,10 +82,11 @@ const ScheduleForm = ({ handleModalClose, mode, scheduleData }: TScheduleProps) 
     if (mode === 'add') {
       await addSchedule(data, joiner, startDateTime, endDateTime, categoryId, setScheduleFormReset);
       const updatedCalendarData = await fetchCalendar({
-        date: dayjs(startDateTime).format('YYYY-MM-DD'),
+        date: dayjs(startDate).format('YYYY-MM-DD'),
       });
-      setCurrentDate(dayjs(startDateTime));
+      setCurrentDate(dayjs(startDate));
       setUpdateCalendarData(updatedCalendarData);
+      setScheduleFormReset();
     }
 
     if (mode === 'detail' && scheduleId) {
@@ -93,9 +94,11 @@ const ScheduleForm = ({ handleModalClose, mode, scheduleData }: TScheduleProps) 
       if (!confirmEdit) return;
       await editSchedule(scheduleId, data, joiner, startDateTime, endDateTime, categoryId);
       const updatedCalendarData = await fetchCalendar({
-        date: dayjs(startDateTime).format('YYYY-MM-DD'),
+        date: dayjs(startDate).format('YYYY-MM-DD'),
       });
+      setCurrentDate(dayjs(startDate));
       setUpdateCalendarData(updatedCalendarData);
+      setScheduleFormReset();
     }
     handleModalClose();
   };
