@@ -3,12 +3,9 @@ import MainCalendar from '@/components/domains/main/calendar/MainCalendar';
 import MiniCalendar from '@/components/domains/main/calendar/MiniCalendar';
 import Category from '@/components/domains/main/category/Category';
 import { fetchCategories } from '@/actions/category';
-import { fetchCalendar } from '@/actions/calendar';
-import dayjs from 'dayjs';
 
 export default async function MainPage() {
   const categoriesData = await fetchCategories();
-  const calendarData = await fetchCalendar({ date: dayjs().format('YYYY-MM-DD') });
 
   return (
     <main className="relative flex flex-1 w-full h-full px-10 pb-10">
@@ -18,7 +15,7 @@ export default async function MainPage() {
       </div>
       <AddScheduleButton categoriesData={categoriesData} />
       <div className="w-full h-full pl-10 flex-grow">
-        <MainCalendar calendarData={calendarData} />
+        <MainCalendar />
       </div>
     </main>
   );

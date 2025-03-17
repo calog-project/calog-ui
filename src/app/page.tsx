@@ -17,8 +17,6 @@ const Section = ({ children, className }: { children: ReactNode; className?: str
 export default function Home() {
   return (
     <>
-      <Header />
-
       <AnimationSection className="h-screen w-full overflow-hidden scroll-smooth">
         <Section className="flex justify-center items-center">
           <Image src={sectionOne} alt="첫번째섹션 이미지" priority className="z-0" />
