@@ -11,7 +11,7 @@ const Header = ({ session }: { session: Session | null }) => {
   const pathName = usePathname();
 
   const shouldShowAuthButtons = useMemo(() => {
-    return !session && (pathName === '/' || pathName === '/login' || pathName === '/register');
+    return !session && pathName === '/';
   }, [session, pathName]);
 
   return (
