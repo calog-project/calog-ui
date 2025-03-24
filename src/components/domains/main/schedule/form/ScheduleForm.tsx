@@ -139,6 +139,7 @@ const ScheduleForm = ({ handleModalClose, mode, scheduleData }: TScheduleProps) 
                 });
                 setUpdateCalendarData(updatedCalendarData);
                 handleModalClose();
+                setScheduleFormReset();
               } else {
                 handleModalClose();
                 reset();

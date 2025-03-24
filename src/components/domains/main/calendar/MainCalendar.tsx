@@ -1,7 +1,5 @@
 'use client';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import useCalendar from '@/hooks/useCalendar';
 import { DAY_LIST } from '@/constants/calendar';
 import { getDayClass } from '@/utils/calendar';
@@ -16,6 +14,7 @@ import { fetchCalendar } from '@/actions/calendar';
 import { useCalendarStore } from '@/stores/calendarStore';
 import ScheduleList from '../schedule/ScheduleList';
 import { useScheduleStore } from '@/stores/scheduleStore';
+import { TSchedule } from '@/types/schedule';
 
 dayjs.locale('ko');
 dayjs.extend(isBetween);
@@ -63,7 +62,7 @@ const MainCalendar = () => {
     }
 
     previousStartDate.current = dayjs(startDate).format('YYYY-MM-DD');
-  }, [startDate]);
+  }, [startDate, currentDate, setCurrentDate]);
 
   useEffect(() => {
     const fetchAndSetCalendarData = async () => {
@@ -72,9 +71,9 @@ const MainCalendar = () => {
     };
 
     fetchAndSetCalendarData();
-  }, [currentDate]);
+  }, [currentDate, setUpdateCalendarData]);
 
-  const selectedDateSchedules = schedules.filter((schedule: any) =>
+  const selectedDateSchedules = schedules.filter((schedule: TSchedule) =>
     dayjs(selectedDate).isBetween(dayjs(schedule.start), dayjs(schedule.end), 'day', '[]'),
   );
 
@@ -115,7 +114,7 @@ const MainCalendar = () => {
             const isSaturday = day.day() === 6;
             const isCurrentMonth = day.isSame(currentDate, 'month');
 
-            const daySchedules = schedules.filter((schedule: any) =>
+            const daySchedules = schedules.filter((schedule: TSchedule) =>
               day.isBetween(dayjs(schedule.start), dayjs(schedule.end), 'day', '[]'),
             );
 
@@ -137,8 +136,9 @@ const MainCalendar = () => {
                   )} ${!isCurrentMonth && 'opacity-20 text-gray-89'}`}>
                   {day.date()}
                 </span>
-                {displayedSchedules.map((schedule: any) => {
-                  const luminance = getLuminance(schedule.categoryColor);
+                {displayedSchedules.map((schedule: TSchedule) => {
+                  const categoryColor = schedule.categoryColor ?? '#EFEFEF';
+                  const luminance = getLuminance(categoryColor);
                   const textColor = luminance > 0.5 ? 'text-black' : 'text-white';
 
                   return (
