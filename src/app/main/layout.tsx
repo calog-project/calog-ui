@@ -1,4 +1,3 @@
-import Header from '@/components/domains/landing/header/Header';
 import { Metadata } from 'next';
 import '@/style/globals.css';
 
@@ -12,5 +11,5 @@ export default async function MainPageLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <div className="w-full h-screen flex flex-col gap-10 mx-auto">{children}</div>;
+  return <div className="w-full h-full flex flex-col gap-10 mx-auto mt-10">{children}</div>;
 }
