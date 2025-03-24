@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import '@/style/globals.css';
 import { getServerSession } from 'next-auth';
-import { authOptions } from './api/auth/[...nextauth]/route';
-import Header from '@/components/domains/landing/header/Header';
+import { authOptions } from './api/auth/[...nextauth]/lib/authOption';
+import Header from '@/components/commons/header/Header';
 
 export const metadata: Metadata = {
   title: {
