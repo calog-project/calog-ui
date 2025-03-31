@@ -6,6 +6,6 @@ export const metadata: Metadata = {
   description: 'Calog Login Page',
 };
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function LoginPageLayout({ children }: { children: React.ReactNode }) {
   return <div>{children}</div>;
 }
