@@ -21,7 +21,7 @@ export default function LoginPage() {
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<LoginForm>({
-    mode: 'onBlur',
+    mode: 'onChange',
   });
 
   const router = useRouter();
@@ -53,7 +53,7 @@ export default function LoginPage() {
 
   //Oauth 로그인
   const handleOAuthLogin = async (provider: string) => {
-    window.location.href = `${process.env.NEXT_PUBLIC_URL}/api/auth/${provider}`;
+    await signIn(provider);
   };
 
   return (
