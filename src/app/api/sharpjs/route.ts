@@ -17,12 +17,18 @@ export async function POST(request: Request) {
     .webp({ quality: 80 }) // 초기 품질 설정
     .toBuffer();
 
-  // 0.5MB 이하로 압축
-  const maxSize = 0.5 * 1024 * 1024; // 0.5MB
+  // 0.1MB 이하로 압축
+  const maxSize = 100 * 1024; // 0.1MB
   let quality = 80;
 
   while (compressedBuffer.length > maxSize && quality > 10) {
     quality -= 10;
+    compressedBuffer = await sharp(buffer).resize(512, 512, { fit: 'inside' }).webp({ quality }).toBuffer();
+  }
+
+  // 크기 체크 및 품질 조정
+  if (compressedBuffer.length > maxSize) {
+    quality = Math.max(quality - 10, 10); // 최소 품질 10
     compressedBuffer = await sharp(buffer).resize(512, 512, { fit: 'inside' }).webp({ quality }).toBuffer();
   }
 
