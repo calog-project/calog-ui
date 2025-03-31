@@ -6,6 +6,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { checkEmail, checkNickname } from '@/api/user/user';
+import { debounce } from 'lodash';
 
 interface InputProps {
   email: string;
@@ -21,7 +22,7 @@ const Register = () => {
     formState: { isSubmitting, errors, isValid },
     getValues,
   } = useForm<InputProps>({
-    mode: 'onBlur',
+    mode: 'onChange',
   });
 
   const [nicknameLength, setNicknameLength] = useState(0);
@@ -63,6 +64,15 @@ const Register = () => {
     }
   };
 
+  const checkEmailDebounced = debounce(async (value: string) => {
+    try {
+      return (await checkEmail(value)) || '이미 사용 중인 이메일입니다.';
+    } catch (error) {
+      console.error('Email check failed', error);
+      return '이메일 확인 중 오류가 발생했습니다.';
+    }
+  }, 500);
+
   return (
     <div className="w-full h-full">
       <div className="w-[603px] mx-auto p-[40px] flex flex-col">
@@ -81,16 +91,7 @@ const Register = () => {
                   value: /\S+@\S+\.\S+/,
                   message: '올바른 이메일 형식이 아닙니다.',
                 },
-                validate: async (value) => {
-                  if (!value) return true; // 값이 없으면 검증하지 않음
-                  try {
-                    const isEmailAvailable = await checkEmail(value);
-                    return isEmailAvailable || '이미 사용 중인 이메일입니다.';
-                  } catch (error) {
-                    console.error('Email check failed', error);
-                    return '이메일 확인 중 오류가 발생했습니다.';
-                  }
-                },
+                validate: (value) => checkEmailDebounced(value),
               })}
               className="h-[50px] grow rounded-lg px-4 py-3 border border-gray-d9 focus:border-gray-98"
             />
