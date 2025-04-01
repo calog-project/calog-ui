@@ -69,7 +69,7 @@ const DropdownBox = ({ dataType, title, className, dropdownClassName, value, onC
 
   useEffect(() => {
     setItem(dataType === 'category' ? findItemByCategoryId(value) : findTimeSlotByValue(value));
-  }, [value, dataType, categories, findItemByCategoryId]);
+  }, [value, dataType, categories]);
 
   useOutsideClick(itemRef, toggleState, exceptionRef);
 
