@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import useCalendar from '@/hooks/useCalendar';
 import { DAY_LIST } from '@/constants/calendar';
 import { getDayClass } from '@/utils/calendar';
