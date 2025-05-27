@@ -49,7 +49,7 @@ const CategoryButton = ({ handleCategoryClick, category }: TCategoryButtonProps)
     <>
       <div
         className={`relative flex justify-center items-center w-full h-[50px] bg-white border rounded-[10px] text-center font-medium gap-[5px] cursor-pointer ${
-          selectedCategories.includes(name) ? 'border-blue-33' : 'border-gray-98'
+          selectedCategories.includes(name) ? 'border-blue-33 !bg-blue-76 !bg-opacity-10' : 'border-gray-98'
         }`}
         onClick={() => handleCategoryClick(name)}>
         <span className="w-[20px] h-[20px] mr-2 rounded-full" style={{ backgroundColor: color }} />
