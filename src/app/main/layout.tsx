@@ -11,5 +11,5 @@ export default async function MainPageLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <div className="w-full h-full flex flex-col gap-10 mx-auto mt-10">{children}</div>;
+  return <div className="w-full h-full flex flex-col gap-10 mx-auto mt-20">{children}</div>;
 }

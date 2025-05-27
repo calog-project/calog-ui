@@ -37,7 +37,7 @@ export default function Header() {
   const profileImage = user?.image || '/images/user.svg';
 
   return (
-    <header className="sticky top-0 right-0 left-0 bg-white shadow-custom py-2 px-10 z-50">
+    <header className="fixed top-0 right-0 left-0 bg-white shadow-custom py-2 px-10 z-50">
       <div className="relative flex items-center h-[64px] m-0 mx-auto justify-between">
         <div className="text-4xl font-bold">
           <Image src="/images/logo.svg" alt="로고" width={150} height={40} priority />
