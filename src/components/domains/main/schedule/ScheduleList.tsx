@@ -13,7 +13,7 @@ const ScheduleList = ({ schedules, date }: { schedules: TSchedule[]; date: strin
   const [selectedSchedule, setSeletedSchedule] = useState<TSchedule | null>(null);
 
   return (
-    <div className="w-[300px] h-[calc(100vh-120px)] flex flex-col items-center gap-4 rounded-4 border border-gray-89 rounded-[8px] p-5 overflow-hidden">
+    <div className="w-[300px] h-full flex flex-col items-center gap-4 rounded-4 border border-gray-89 rounded-[8px] p-5 overflow-hidden">
       <h1 className="text-[20px] font-bold mb-5">{formattedDate}</h1>
       {schedules.length > 0 ? (
         <div className="flex flex-col gap-5 w-full flex-grow overflow-y-auto scrollbar-hide">

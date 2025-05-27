@@ -27,7 +27,7 @@ export default async function RootLayout({
           <Header />
           <SocketClient />
           <div id="modal" />
-          <div className="w-full h-screen flex flex-col gap-10 mx-auto">{children}</div>
+          <div className="w-full h-screen flex flex-col gap-10 mx-auto mt-20 overflow-hidden">{children}</div>
         </SessionProviderWrapper>
       </body>
     </html>
