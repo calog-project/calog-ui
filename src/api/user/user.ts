@@ -9,6 +9,34 @@ interface ApiResponse {
   };
 }
 
+// user 조회
+export async function getUserInfo(id: number, accessToken: string): Promise<any> {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/user/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `${accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`유저 정보를 가져오는 데 실패했습니다. 상태코드: ${response.status}`);
+    }
+
+    const data: any = await response.json();
+
+    if (!data.isSuccess) {
+      throw new Error(data.payload.message || '유저 정보 요청 실패');
+    }
+
+    return data.payload.data;
+  } catch (error) {
+    console.error('getUserInfo 에러:', error);
+    throw error;
+  }
+}
+
 export async function checkNickname(nickname: string): Promise<boolean> {
   try {
     const response = await fetch(
