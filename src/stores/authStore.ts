@@ -1,24 +1,45 @@
-import {create} from "zustand"
+import { create } from 'zustand';
+
+interface User {
+  id: number;
+  email: string;
+  image?: string;
+  nickname: string;
+}
 
 interface AuthState {
   isLoggedIn: boolean;
-  user: { email: string } | null;
-  login: (email: string, accessToken: string) => void;
+  user: User | null;
+  accessToken: string | null;
+  login: (user: User, accessToken: string) => void;
   logout: () => void;
+  restoreSession: () => void;
 }
 
 const useAuthStore = create<AuthState>((set) => ({
   isLoggedIn: false,
   user: null,
-  login: (email, accessToken) => {
-    //TODO 세션스토리지에 액세스토큰 저장
+  accessToken: null,
+
+  login: (user, accessToken) => {
     sessionStorage.setItem('accessToken', accessToken);
-    set({ isLoggedIn: true, user: { email } });
+    sessionStorage.setItem('user', JSON.stringify(user));
+    set({ isLoggedIn: true, user, accessToken });
   },
+
   logout: () => {
-    //TODO 세션스토리지에 액세스토큰 삭제
     sessionStorage.removeItem('accessToken');
-    set({ isLoggedIn: false, user: null });
+    sessionStorage.removeItem('user');
+    set({ isLoggedIn: false, user: null, accessToken: null });
+  },
+
+  restoreSession: () => {
+    const token = sessionStorage.getItem('accessToken');
+    const userStr = sessionStorage.getItem('user');
+    if (token && userStr) {
+      const user = JSON.parse(userStr);
+      set({ isLoggedIn: true, user, accessToken: token });
+    }
   },
 }));
 
