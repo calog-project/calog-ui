@@ -7,6 +7,8 @@ import { cookies } from 'next/headers';
 interface CustomUser {
   id: number;
   email: string;
+  nickname: string;
+  image: string;
   accessToken: string;
 }
 
@@ -45,6 +47,8 @@ export const authOptions: NextAuthOptions = {
               id: user.id,
               email: user.email,
               accessToken: accessToken,
+              nickname: user.nickname,
+              image: user.image,
             };
           }
           return null;
@@ -100,6 +104,8 @@ export const authOptions: NextAuthOptions = {
         token.id = (user as CustomUser).id;
         token.email = (user as CustomUser).email;
         token.accessToken = (user as CustomUser).accessToken;
+        token.nickname = (user as CustomUser).nickname;
+        token.image = (user as CustomUser).image;
       }
       return token;
     },
@@ -107,6 +113,8 @@ export const authOptions: NextAuthOptions = {
       session.accessToken = token.accessToken;
       session.user.id = token.id as number;
       session.user.email = token.email as string;
+      session.user.nickname = token.nickname as string;
+      session.user.image = token.image as string;
       return session;
     },
   },
