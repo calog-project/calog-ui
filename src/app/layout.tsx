@@ -2,7 +2,9 @@ import type { Metadata } from 'next';
 import '@/style/globals.css';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './api/auth/[...nextauth]/lib/authOption';
+import SessionProviderWrapper from '@/components/SessionProviderWrapper';
 import Header from '@/components/commons/header/Header';
+import SocketClient from '@/components/SocketClient';
 
 export const metadata: Metadata = {
   title: {
@@ -21,9 +23,12 @@ export default async function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <Header session={session} />
-        <div id="modal" />
-        <div className="w-full h-screen flex flex-col gap-10 mx-auto">{children}</div>
+        <SessionProviderWrapper session={session}>
+          <Header />
+          <SocketClient />
+          <div id="modal" />
+          <div className="w-full h-screen flex flex-col gap-10 mx-auto">{children}</div>
+        </SessionProviderWrapper>
       </body>
     </html>
   );
