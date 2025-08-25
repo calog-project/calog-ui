@@ -8,6 +8,7 @@
   height: 350px;
   border: none;
   border-radius: 0 !important;
+  z-index: 1000;
 }
 
 .react-datepicker__triangle {
