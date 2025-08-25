@@ -1,7 +1,10 @@
-import { NotificationProps } from '@/types/notification';
 import { IoNotifications } from 'react-icons/io5';
 import React, { useState } from 'react';
 import NotificationSidebar from './NotificationSidebar';
+
+export type NotificationProps = {
+  hasNew?: boolean;
+};
 
 const Notification = ({ hasNew = true }: NotificationProps) => {
   const [open, setOpen] = useState(false);

@@ -1,7 +1,7 @@
 'use server';
 
 import { authOptions } from '@/app/api/auth/[...nextauth]/lib/authOption';
-import { NotificationItem } from '@/types/notification';
+import { NotificationItem, NotificationMeta } from '@/types/notification';
 import { getServerSession } from 'next-auth';
 
 export async function getNotifications(userId: number): Promise<NotificationItem[]> {
@@ -39,9 +39,11 @@ export async function getNotifications(userId: number): Promise<NotificationItem
       isRead: false,
       createdAt: new Date(Date.now() - 1000 * 60 * 30),
       meta: {
-        senderName: '김준현',
+        scheduleId: 1,
         scheduleTitle: '팀 미팅',
-      },
+        inviterId: 123,
+        inviterNickname: '김준현',
+      } as NotificationMeta,
     },
     {
       id: 2,
@@ -52,8 +54,9 @@ export async function getNotifications(userId: number): Promise<NotificationItem
       isRead: true,
       createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2),
       meta: {
-        senderName: '이규민',
-      },
+        followerId: 456,
+        followerNickname: '이규민',
+      } as NotificationMeta,
     },
     {
       id: 3,
@@ -64,9 +67,10 @@ export async function getNotifications(userId: number): Promise<NotificationItem
       isRead: false,
       createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24),
       meta: {
+        scheduleId: 2,
         scheduleTitle: '프로젝트 발표',
-        time: '1시간 후',
-      },
+        scheduleStartTime: new Date(Date.now() + 1000 * 60 * 60),
+      } as NotificationMeta,
     },
     {
       id: 4,
@@ -77,8 +81,9 @@ export async function getNotifications(userId: number): Promise<NotificationItem
       isRead: false,
       createdAt: new Date(Date.now() - 1000 * 60 * 60 * 3),
       meta: {
-        senderName: '최병준',
-      },
+        followerId: 789,
+        followerNickname: '최병준',
+      } as NotificationMeta,
     },
   ];
 }

@@ -1,12 +1,12 @@
 'use client';
 
-import Link from 'next/link';
 import Image from 'next/image';
-import Button from '@/components/commons/button/Button';
 import { usePathname } from 'next/navigation';
 import { useState, useMemo, useEffect } from 'react';
-import { signOut, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import useAuthStore from '@/stores/authStore';
+import AuthButtons from './AuthButtons';
+import AuthenticatedUserMenu from './AuthenticatedUserMenu';
 
 export default function Header() {
   const { data: session, status } = useSession();
@@ -44,61 +44,15 @@ export default function Header() {
         </div>
 
         {/* 비로그인 상태 - 홈페이지 */}
-        {showAuthButtons && (
-          <div className="flex gap-3">
-            <Link href="/register">
-              <Button buttonSize="normal" bgColor="filled" className="w-[110px] h-[42px] bg-blue-33 text-xl">
-                회원가입
-              </Button>
-            </Link>
-            <Link href="/login">
-              <Button buttonSize="normal" bgColor="ghost" className="w-[110px] h-[42px] text-xl">
-                로그인
-              </Button>
-            </Link>
-          </div>
-        )}
+        {showAuthButtons && <AuthButtons />}
 
         {/* 로그인 상태 */}
         {session && (
-          <div className="flex items-center gap-4">
-            <nav className="hidden md:flex gap-6 mr-6">
-              <Link href="/main" className="text-gray-700 hover:text-blue-500 font-medium">
-                대시보드
-              </Link>
-              <Link href="/notifications" className="text-gray-700 hover:text-blue-500 font-medium">
-                알림
-              </Link>
-            </nav>
-
-            <div className="relative">
-              <button onClick={toggleProfileMenu} className="flex items-center gap-2 focus:outline-none">
-                <div className="w-[25px] h-[25px] rounded-full bg-gray-200 overflow-hidden">
-                  <Image
-                    src={profileImage}
-                    alt="프로필"
-                    width={50}
-                    height={50}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </button>
-
-              {showProfileMenu && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-                  <Link href="/mypage" className="block px-4 py-2 text-[14px] text-gray-700 hover:bg-gray-100">
-                    프로필 관리
-                  </Link>
-                  <div className="border-t border-gray-100 my-1" />
-                  <button
-                    onClick={() => signOut({ callbackUrl: '/' })}
-                    className="block w-full text-left px-4 py-2 text-[14px] text-red-600 hover:bg-gray-100">
-                    로그아웃
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
+          <AuthenticatedUserMenu
+            toggleProfileMenu={toggleProfileMenu}
+            showProfileMenu={showProfileMenu}
+            profileImage={profileImage}
+          />
         )}
       </div>
     </header>
