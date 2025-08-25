@@ -1,13 +1,9 @@
-export type NotificationProps = {
-  hasNew?: boolean;
-};
-
 export interface NotificationItem {
   aggregateId?: string;
   id?: number;
   type: NotificationType;
   receiverId: number;
-  meta?: Record<string, string>;
+  meta?: NotificationMeta;
   url?: string;
   message: string;
   actionable: boolean;
@@ -26,7 +22,59 @@ export enum NotificationType {
   SCHEDULE_DELETED = 'SCHEDULE_DELETED',
 }
 
-export interface NotificationSidebarProps {
-  open: boolean;
-  onClose: () => void;
+export interface FollowRequestedMeta {
+  followerId: number;
+  followerNickname: string;
 }
+
+export interface FollowedMeta {
+  followerId: number;
+  followerNickname: string;
+}
+
+export interface ScheduleUpcomingMeta {
+  scheduleId: number;
+  scheduleTitle: string;
+  scheduleStartTime: Date;
+}
+
+export interface ScheduleInvitedMeta {
+  scheduleId: number;
+  scheduleTitle: string;
+  inviterId: number;
+  inviterNickname: string;
+}
+
+export interface ScheduleSharedMeta {
+  //TODO
+  inviterId: number;
+  inviterNickname: string;
+}
+
+export interface ScheduleDeletedMeta {
+  //TODO
+  scheduleId: number;
+  scheduleTitle: string;
+}
+
+export interface CommonMeta {
+  message?: string;
+}
+
+export type NotificationMeta =
+  | FollowRequestedMeta
+  | FollowedMeta
+  | ScheduleUpcomingMeta
+  | ScheduleInvitedMeta
+  | ScheduleSharedMeta
+  | ScheduleDeletedMeta;
+
+export type NotificationMetaMap = {
+  [NotificationType.FOLLOW_REQUESTED]: FollowRequestedMeta;
+  [NotificationType.FOLLOWED]: FollowedMeta;
+  [NotificationType.SCHEDULE_INVITED]: ScheduleInvitedMeta;
+  [NotificationType.SCHEDULE_UPCOMING]: ScheduleUpcomingMeta;
+  [NotificationType.SCHEDULE_SHARED]: ScheduleSharedMeta;
+  [NotificationType.SCHEDULE_DELETED]: ScheduleDeletedMeta;
+  [NotificationType.COMMON]: CommonMeta;
+};

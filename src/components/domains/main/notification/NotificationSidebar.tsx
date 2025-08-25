@@ -1,8 +1,13 @@
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import { NotificationItem, NotificationSidebarProps } from '@/types/notification';
+import { NotificationItem } from '@/types/notification';
 import { getNotifications } from '@/actions/notification';
 import Message from './Message';
+
+export interface NotificationSidebarProps {
+  open: boolean;
+  onClose: () => void;
+}
 
 const NotificationSidebar: React.FC<NotificationSidebarProps> = ({ open, onClose }) => {
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
