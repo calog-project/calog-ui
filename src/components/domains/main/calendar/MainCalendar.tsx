@@ -80,7 +80,7 @@ const MainCalendar = () => {
   );
 
   return (
-    <div className="flex gap-10 w-full h-full overflow-hidden">
+    <div className={`flex w-full h-full overflow-hidden ${isListOpen && 'gap-10'}`}>
       <div className="w-full h-full flex flex-col items-center rounded-4 border border-gray-89 rounded-[8px] p-5">
         <header className="flex w-full justify-between items-center">
           <div className="flex items-center justify-between gap-4 mb-2">

@@ -10,7 +10,6 @@ import { FaCalendar } from 'react-icons/fa6';
 import { forwardRef } from 'react';
 import { TSchedule } from '@/types/schedule';
 import DatePicker from 'react-datepicker';
-import '@/style/customDatepicker.css';
 import { useScheduleStore } from '@/stores/scheduleStore';
 
 dayjs.extend(utc);
