@@ -88,6 +88,8 @@ export const authOptions: NextAuthOptions = {
               id: user.userId,
               email: 'test',
               accessToken: accessToken,
+              nickname: user.nickname || '',
+              image: user.image || '',
             };
           }
           return null;

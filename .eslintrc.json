@@ -31,7 +31,8 @@
     "array-callback-return": 0,
     "react/jsx-pascal-case": "warn",
     "react/self-closing-comp": "warn",
-    "react/jsx-key": "warn"
+    "react/jsx-key": "warn",
+    "@typescript-eslint/no-explicit-any": "warn"
   },
   "overrides": [
     {

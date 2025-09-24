@@ -1,23 +1,15 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { useDebounce } from '@/hooks/useDebounce';
-import { searchUser } from '@/api/follow/follow';
 import { getUserInfo } from '@/api/user/user';
 import useAuthStore from '@/stores/authStore';
-import { highlightText } from '@/utils/highlightText';
 import UserProfile from '@/components/domains/mypage/UserProfile';
-import UserSearchBox from '@/components/domains/mypage/UserSearchBox';
 import UserList from '@/components/commons/userList/UserList';
 import { useSocketStore } from '@/stores/socketStore';
 
 export default function MyPage() {
-  const [inputValue, setInputValue] = useState('');
-  const [searchResult, setSearchResult] = useState<any[]>([]);
   const [follower, setFollower] = useState(0);
   const [following, setFollowing] = useState(0);
-  const debouncedValue = useDebounce(inputValue, 300);
   const { notifications } = useSocketStore();
   console.log(notifications);
 
@@ -27,26 +19,6 @@ export default function MyPage() {
 
   console.log(user);
   console.log(accessToken);
-
-  useEffect(() => {
-    if (!debouncedValue.trim() || !accessToken) {
-      setSearchResult([]);
-      return;
-    }
-
-    const fetchSearch = async () => {
-      try {
-        const result = await searchUser(debouncedValue, accessToken);
-        setSearchResult(result);
-
-        console.log(searchResult);
-      } catch (error) {
-        console.error('유저 검색 실패:', error);
-      }
-    };
-
-    fetchSearch();
-  }, [debouncedValue, accessToken]);
 
   useEffect(() => {
     const fetchFollowData = async () => {
@@ -72,13 +44,6 @@ export default function MyPage() {
           <div className="h-[3px] w-[3px] border border-primary border-[2px] rounded-full" />
           <div className="h-[3px] w-[3px] border border-primary border-[2px] rounded-full" />
         </div>
-
-        {/* <UserSearchBox
-          inputValue={inputValue}
-          onInputChange={setInputValue}
-          searchResult={searchResult}
-          myUserId={user?.id}
-        /> */}
 
         <ul className="relative flex flex-col justify-start w-full gap-[20px] text-[18px] text-bold">
           <li>프로필 정보</li>
