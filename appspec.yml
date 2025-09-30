@@ -3,10 +3,10 @@ os: linux
 
 files:
   - source: /
-    destination: /home/ubuntu/calog
+    destination: /home/ubuntu/calog-ui
     overwrite: yes
 permissions:
-  - object: /home/ubuntu/calog
+  - object: /home/ubuntu/calog-ui
     owner: ubuntu
     group: ubuntu
     mode: 755
