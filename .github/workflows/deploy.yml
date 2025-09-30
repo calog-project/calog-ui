@@ -7,7 +7,7 @@ on:
 
 env:
   S3_BUCKET_NAME: calog-development
-  CODE_DEPLOY_APPLICATION_NAME: client-deploy
+  CODE_DEPLOY_APPLICATION_NAME: calog-client-deploy
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: group1
 
 jobs:
