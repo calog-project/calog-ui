@@ -3,7 +3,12 @@ os: linux
 files:
   - source: /
     destination: /home/ubuntu/calog
-    overwrite: true
+    overwrite: yes
+permissions:
+  - object: /home/ubuntu/calog
+    owner: ubuntu
+    group: ubuntu
+    mode: 755
 hooks:
   BeforeInstall:
     - location: scripts/before-install.sh
