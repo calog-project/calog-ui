@@ -28,13 +28,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # 프로젝트 빌드
-      - name: Build next app
-        run: npm run build
-
-      # 프로젝트 압축
+      # 프로젝트 압축 (.next 제외 - EC2에서 빌드)
       - name: Make zip file
-        run: zip -qq -r ./calog.zip . -x "node_modules/*"
+        run: zip -qq -r ./calog.zip . -x "node_modules/*" ".next/*"
         # -qq: quit 모드로 실행 (에러나 경고메세지만 출력하도록 함)
         # -r: 지정된 디렉토리를 재귀적으로 압축 (하위 디렉토리와 파일들 모두 압축)
         # -x "node_modules/*": node_modules 폴더 제외
