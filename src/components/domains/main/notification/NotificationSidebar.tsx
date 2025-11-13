@@ -1,7 +1,19 @@
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
-import { NotificationItem } from '@/types/notification';
-import { getNotifications } from '@/actions/notification';
+import React, { useEffect, useState, useMemo } from 'react';
+import {
+  FollowRequestedMeta,
+  NotificationItem,
+  NotificationType,
+  ScheduleInvitedMeta,
+} from '@/types/notification';
+import {
+  allNotificationsAsRead,
+  getNotifications,
+  markNotificationAsRead,
+  respondToFollowRequest,
+  respondToScheduleInvite,
+} from '@/actions/notification';
+import { useSocketStore } from '@/stores/socketStore';
 import Message from './Message';
 
 export interface NotificationSidebarProps {
@@ -10,16 +22,32 @@ export interface NotificationSidebarProps {
 }
 
 const NotificationSidebar: React.FC<NotificationSidebarProps> = ({ open, onClose }) => {
-  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+  const [serverNotifications, setServerNotifications] = useState<NotificationItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // 소켓 알림 가져오기
+  const socketNotifications = useSocketStore(s => s.notifications);
+  const markSocketAsRead = useSocketStore(s => s.markAsRead);
+
+  // 서버 알림 + 소켓 알림 합치기 (중복 제거)
+  const notifications = useMemo(() => {
+    const serverIds = new Set(serverNotifications.map(n => n.id));
+    const uniqueSocketNotifications = socketNotifications.filter(n => !serverIds.has(n.id));
+
+    return [...uniqueSocketNotifications, ...serverNotifications].sort((a, b) => {
+      const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      return dateB - dateA;
+    });
+  }, [serverNotifications, socketNotifications]);
 
   const fetchNotifications = async () => {
     try {
       setLoading(true);
       setError(null);
       const data = await getNotifications(6);
-      setNotifications(data);
+      setServerNotifications(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : '알림을 불러오는데 실패했습니다.');
     } finally {
@@ -30,49 +58,56 @@ const NotificationSidebar: React.FC<NotificationSidebarProps> = ({ open, onClose
   // 개별 알림 읽음 처리
   const handleNotificationRead = async (notificationId: number) => {
     try {
-      // await markNotificationAsRead(notificationId);
+      await markNotificationAsRead(notificationId);
 
-      setNotifications((prev) =>
-        prev.map((notification) =>
+      // 서버 알림 읽음 처리
+      setServerNotifications(prev =>
+        prev.map(notification =>
           notification.id === notificationId ? { ...notification, isRead: true } : notification,
         ),
       );
+
+      // 소켓 알림 읽음 처리
+      markSocketAsRead(notificationId);
     } catch (err) {
       console.error('알림 읽음 처리 오류:', err);
     }
   };
 
   // 버튼 클릭 처리
-  const handleButtonClick = async (notificationId: number, action: 'accept' | 'reject') => {
+  const handleButtonClick = async (notification: NotificationItem, action: 'accept' | 'reject') => {
+    if (!notification.id || !notification.meta) return;
+
     try {
-      if (action === 'accept') {
-        // await acceptFollowRequest(notificationId); // 팔로우 수락
-        // await acceptScheduleInvite(notificationId); // 일정 참석
-      } else if (action === 'reject') {
-        // await rejectFollowRequest(notificationId); // 팔로우 거절
-        // await rejectScheduleInvite(notificationId); // 일정 거절
+      switch (notification.type) {
+        case NotificationType.FOLLOW_REQUESTED:
+          await respondToFollowRequest(notification.meta as FollowRequestedMeta, action);
+          break;
+        case NotificationType.SCHEDULE_INVITED:
+          await respondToScheduleInvite(notification.meta as ScheduleInvitedMeta, action);
+          break;
+        default:
+          return;
       }
 
-      setNotifications((prev) =>
-        prev.map((notification) =>
-          notification.id === notificationId ? { ...notification, isRead: true } : notification,
-        ),
-      );
+      // 액션 후 알림 읽음 처리
+      await handleNotificationRead(notification.id);
     } catch (err) {
       console.error('버튼 클릭 처리 오류:', err);
     }
   };
 
   // 모든 알림 읽음 처리
-  // const handleReadAll = async () => {
-  //   try {
-  //     await allNotificationsAsRead();
+  const handleReadAll = async () => {
+    try {
+      await allNotificationsAsRead();
 
-  //     setNotifications((prev) => prev.map((notification) => ({ ...notification, isRead: true })));
-  //   } catch (err) {
-  //     console.error('모든 알림 읽음 처리 오류:', err);
-  //   }
-  // };
+      setServerNotifications(prev => prev.map(notification => ({ ...notification, isRead: true })));
+      // 소켓 알림도 모두 읽음 처리 필요
+    } catch (err) {
+      console.error('모든 알림 읽음 처리 오류:', err);
+    }
+  };
 
   useEffect(() => {
     if (open) {
@@ -110,12 +145,12 @@ const NotificationSidebar: React.FC<NotificationSidebarProps> = ({ open, onClose
   } else {
     content = (
       <div className="max-h-[calc(100vh-120px)] overflow-y-auto flex flex-col">
-        {notifications.map((notification) => (
+        {notifications.map(notification => (
           <Message
-            key={notification.id}
+            key={notification.id ?? notification.aggregateId}
             notification={notification}
-            onRead={handleNotificationRead}
-            onButtonClick={handleButtonClick}
+            onRead={() => notification.id && handleNotificationRead(notification.id)}
+            onButtonClick={action => handleButtonClick(notification, action)}
           />
         ))}
       </div>
@@ -142,7 +177,10 @@ const NotificationSidebar: React.FC<NotificationSidebarProps> = ({ open, onClose
         <div className="p-4 flex items-center justify-between border-b border-gray-100">
           <h2 className="text-3xl font-bold">알림</h2>
           {notifications.length > 0 && (
-            <button type="button" className="text-2xl text-gray-a9 hover:text-gray-700 transition-colors">
+            <button
+              type="button"
+              onClick={handleReadAll}
+              className="text-2xl text-gray-a9 hover:text-gray-700 transition-colors">
               모두읽음
             </button>
           )}

@@ -1,91 +1,79 @@
 'use server';
 
 import { authOptions } from '@/app/api/auth/[...nextauth]/lib/authOption';
-import { NotificationItem, NotificationMeta } from '@/types/notification';
+import { FollowRequestMeta, NotificationItem, ScheduleInvitedMeta } from '@/types/notification';
 import { getServerSession } from 'next-auth';
 
 export async function getNotifications(userId: number): Promise<NotificationItem[]> {
-  // const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
 
-  // try {
-  //   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/notification/${userId}`, {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       Authorization: `${session?.accessToken}`,
-  //     },
-  //     cache: 'no-store',
-  //   });
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/notification/${userId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `${session?.accessToken}`,
+      },
+      cache: 'no-store',
+    });
 
-  //   if (!response.ok) {
-  //     throw new Error('알림을 불러오는데 실패했습니다.');
-  //   }
+    if (!response.ok) {
+      throw new Error('알림을 불러오는데 실패했습니다.');
+    }
 
-  //   const data = await response.json();
-  //   return data.notifications || [];
-  // } catch (error) {
-  //   console.error('알림 조회 오류:', error);
-  //   throw new Error('알림을 불러오는데 실패했습니다.');
-  // }
+    const data = await response.json();
+    return data.notifications || [];
+  } catch (error) {
+    console.error('알림 조회 오류:', error);
+    throw new Error('알림을 불러오는데 실패했습니다.');
+  }
+}
 
-  // 더미 데이터
-  return [
-    {
-      id: 1,
-      type: 'SCHEDULE_INVITED' as NotificationItem['type'],
-      receiverId: userId,
-      message: '',
-      actionable: true,
-      isRead: false,
-      createdAt: new Date(Date.now() - 1000 * 60 * 30),
-      meta: {
-        scheduleId: 1,
-        scheduleTitle: '팀 미팅',
-        inviterId: 123,
-        inviterNickname: '김준현',
-      } as NotificationMeta,
-    },
-    {
-      id: 2,
-      type: 'FOLLOW_REQUESTED' as NotificationItem['type'],
-      receiverId: userId,
-      message: '',
-      actionable: true,
-      isRead: true,
-      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2),
-      meta: {
-        followerId: 456,
-        followerNickname: '이규민',
-      } as NotificationMeta,
-    },
-    {
-      id: 3,
-      type: 'SCHEDULE_UPCOMING' as NotificationItem['type'],
-      receiverId: userId,
-      message: '',
-      actionable: false,
-      isRead: false,
-      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24),
-      meta: {
-        scheduleId: 2,
-        scheduleTitle: '프로젝트 발표',
-        scheduleStartTime: new Date(Date.now() + 1000 * 60 * 60),
-      } as NotificationMeta,
-    },
-    {
-      id: 4,
-      type: 'FOLLOWED' as NotificationItem['type'],
-      receiverId: userId,
-      message: '',
-      actionable: false,
-      isRead: false,
-      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 3),
-      meta: {
-        followerId: 789,
-        followerNickname: '최병준',
-      } as NotificationMeta,
-    },
-  ];
+// 팔로우 요청 응답
+export async function respondToFollowRequest(meta: FollowRequestMeta, response: 'accept' | 'reject'): Promise<void> {
+  const session = await getServerSession(authOptions);
+  try {
+    const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/follow`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `${session?.accessToken}`,
+      },
+      body: JSON.stringify({ followerId: meta.followerId, response }),
+    });
+
+    if (!apiResponse.ok) {
+      throw new Error('팔로우 요청 처리에 실패했습니다.');
+    }
+  } catch (error) {
+    console.error('팔로우 요청 처리 오류:', error);
+    throw new Error('팔로우 요청 처리에 실패했습니다.');
+  }
+}
+
+// 일정 초대 응답
+export async function respondToScheduleInvite(
+  meta: ScheduleInvitedMeta,
+  response: 'accept' | 'reject',
+): Promise<void> {
+  const session = await getServerSession(authOptions);
+  try {
+    const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/schedule/response`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `${session?.accessToken}`,
+      },
+      body: JSON.stringify({ scheduleId: meta.scheduleId, response }),
+    });
+
+    if (!apiResponse.ok) {
+      throw new Error('일정 초대 처리에 실패했습니다.');
+    }
+  } catch (error) {
+    console.error('일정 초대 처리 오류:', error);
+    throw new Error('일정 초대 처리에 실패했습니다.');
+  }
 }
 
 // 알림 읽음 처리

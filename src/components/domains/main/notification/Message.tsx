@@ -7,7 +7,7 @@ import { formatTime } from '@/constants/formatTime';
 interface MessageProps {
   notification: NotificationItem;
   onRead?: (id: number) => void;
-  onButtonClick?: (id: number, action: 'accept' | 'reject') => void;
+  onButtonClick?: (action: 'accept' | 'reject') => void;
 }
 
 const Message: React.FC<MessageProps> = ({ notification, onRead, onButtonClick }) => {
@@ -21,8 +21,8 @@ const Message: React.FC<MessageProps> = ({ notification, onRead, onButtonClick }
 
   const handleButtonClick = (e: React.MouseEvent, action: 'accept' | 'reject') => {
     e.stopPropagation();
-    if (notification.id && onButtonClick) {
-      onButtonClick(notification.id, action);
+    if (onButtonClick) {
+      onButtonClick(action);
     }
   };
 
