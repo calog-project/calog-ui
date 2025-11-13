@@ -17,10 +17,10 @@ export default function UserProfile({ profileImage, nickname, follower, followin
         <p className="text-[20px]">{nickname}</p>
         <div className="flex gap-[60px] w-full items-center justify-start">
           <p className="text-[14px] text-gray-500">
-            팔로우 <span>{following}</span>
+            팔로워 <span>{follower}</span>
           </p>
           <p className="text-[14px] text-gray-500">
-            팔로워 <span>{follower}</span>
+            팔로잉 <span>{following}</span>
           </p>
         </div>
       </div>

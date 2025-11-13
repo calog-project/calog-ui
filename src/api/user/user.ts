@@ -9,6 +9,12 @@ interface ApiResponse {
   };
 }
 
+interface UpdateUserProfileData {
+  nickname?: string;
+  description?: string;
+  image?: string;
+}
+
 // user 조회
 export async function getUserInfo(id: number, accessToken: string): Promise<any> {
   try {
@@ -33,6 +39,69 @@ export async function getUserInfo(id: number, accessToken: string): Promise<any>
     return data.payload.data;
   } catch (error) {
     console.error('getUserInfo 에러:', error);
+    throw error;
+  }
+}
+
+// 사용자 프로필 업데이트 (JSON)
+export async function updateUserProfile(id: number, accessToken: string, data: UpdateUserProfileData): Promise<any> {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/user/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const errorData = await response
+        .json()
+        .catch(() => ({ message: `프로필 업데이트에 실패했습니다. 상태코드: ${response.status}` }));
+      throw new Error(errorData.payload?.message || `프로필 업데이트에 실패했습니다.`);
+    }
+
+    const result = await response.json();
+    if (!result.isSuccess) {
+      throw new Error(result.payload.message || '프로필 업데이트 요청이 실패했습니다.');
+    }
+    return result;
+  } catch (error) {
+    console.error('updateUserProfile 에러:', error);
+    throw error;
+  }
+}
+
+// 사용자 프로필 업데이트 (FormData)
+export async function updateUserProfileWithFormData(
+  id: number,
+  accessToken: string,
+  data: FormData,
+): Promise<any> {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/user/${id}`, {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: data,
+    });
+
+    if (!response.ok) {
+      const errorData = await response
+        .json()
+        .catch(() => ({ message: `프로필 업데이트에 실패했습니다. 상태코드: ${response.status}` }));
+      throw new Error(errorData.payload?.message || `프로필 업데이트에 실패했습니다.`);
+    }
+
+    const result = await response.json();
+    if (!result.isSuccess) {
+      throw new Error(result.payload.message || '프로필 업데이트 요청이 실패했습니다.');
+    }
+    return result;
+  } catch (error) {
+    console.error('updateUserProfileWithFormData 에러:', error);
     throw error;
   }
 }

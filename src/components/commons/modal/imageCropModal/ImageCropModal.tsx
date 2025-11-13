@@ -4,13 +4,11 @@ import React, { useState, useRef } from 'react';
 import Modal from '@/components/commons/modal/Modal';
 import ReactCrop, { Crop, PixelCrop, centerCrop, makeAspectCrop, convertToPixelCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
-import Image from 'next/image';
 
 interface ImageCropModalProps {
   openModal: boolean;
   handleModalClose: () => void;
   selectedImg: string;
-  setProfileImg: (selectedImg: string) => void;
   originalFileName: string;
   onCropComplete: (file: File) => void;
 }
@@ -18,7 +16,6 @@ interface ImageCropModalProps {
 const ImageCropModal = ({
   openModal,
   handleModalClose,
-  setProfileImg,
   selectedImg,
   originalFileName,
   onCropComplete,
@@ -87,9 +84,6 @@ const ImageCropModal = ({
         type: originalFileType,
       });
 
-      // 크롭된 이미지를 미리보기로 업데이트
-      setProfileImg(URL.createObjectURL(croppedImageFile));
-
       // onCropComplete 콜백 호출
       onCropComplete(croppedImageFile);
 
@@ -103,7 +97,7 @@ const ImageCropModal = ({
       openModal={openModal}
       handleModalClose={() => {}}
       className="p-[25px] flex flex-col w-[500px] h-auto max-h-[80vh] items-center">
-      <div className="w-full h-full flex flex-col items-center">
+      <div className="relative flex-1 w-full mb-4">
         <ReactCrop
           crop={crop}
           onComplete={(c) => setCompletedCrop(c)}
@@ -113,7 +107,13 @@ const ImageCropModal = ({
           }}
           aspect={1}
           circularCrop>
-          <Image src={selectedImg} ref={imgRef} alt="이미지" className="max-h-full" onLoad={onImageLoadToCrop} />
+          <img
+            src={selectedImg}
+            ref={imgRef}
+            alt="이미지"
+            style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
+            onLoad={onImageLoadToCrop}
+          />
         </ReactCrop>
       </div>
 
@@ -121,7 +121,7 @@ const ImageCropModal = ({
         <button className="w-1/2 h-[40px] rounded-[4px] bg-primary text-white" onClick={handleUpload}>
           저장
         </button>
-        <button className="w-1/2 h-[40px] rounded-[4px] bg-[#E7E5E4]" onClick={handleModalClose}>
+        <button className="w-1/2 h-[40px] rounded-[4px] bg-[#615f5d]" onClick={handleModalClose}>
           취소
         </button>
       </div>
