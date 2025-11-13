@@ -68,9 +68,9 @@ const ImageCropModal = ({
       canvas.width,
       canvas.height,
     );
-    // 캔버스에 그려진 이미지를 Bolb으로 전환하여 반환함.
+    // 캔버스에 그려진 이미지를 WebP 형식의 Blob으로 전환하여 반환함.
     return new Promise((resolve) => {
-      canvas.toBlob((blob) => resolve(blob!));
+      canvas.toBlob((blob) => resolve(blob!), 'image/webp', 0.9);
     });
   };
 
@@ -78,10 +78,10 @@ const ImageCropModal = ({
     e.preventDefault();
     if (imgRef.current && completedCrop) {
       const croppedImageBlob = await executeImageCrop(imgRef.current, completedCrop);
-      const originalFileType = imgRef.current.src.split(';')[0].split(':')[1];
-      const newFileName = `cropped-${originalFileName}`;
+      const nameWithoutExtension = (originalFileName || 'image.jpg').split('.').slice(0, -1).join('.');
+      const newFileName = `${nameWithoutExtension || 'image'}.webp`;
       const croppedImageFile = new File([croppedImageBlob], newFileName, {
-        type: originalFileType,
+        type: 'image/webp',
       });
 
       // onCropComplete 콜백 호출
