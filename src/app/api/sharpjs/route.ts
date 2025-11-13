@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     compressedBuffer = await sharp(buffer).resize(512, 512, { fit: 'inside' }).webp({ quality }).toBuffer();
   }
 
-  const compressedFile = new Blob([compressedBuffer], { type: 'image/webp' });
+  const compressedFile = new Blob([new Uint8Array(compressedBuffer)], { type: 'image/webp' });
   const compressedFileUrl = URL.createObjectURL(compressedFile);
 
   return NextResponse.json({ url: compressedFileUrl });
