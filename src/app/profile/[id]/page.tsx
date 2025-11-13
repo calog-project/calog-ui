@@ -49,6 +49,13 @@ export default function ProfilePage() {
     fetchUserProfile();
   }, [id, accessToken, user?.id, router]);
 
+  const handleStatusChange = (newStatus: 'none' | 'pending' | 'approved') => {
+    setFollowStatus(newStatus);
+    if (newStatus === 'none') {
+      setIsMutualFollow(false);
+    }
+  };
+
   if (!isUserFound) {
     return (
       <main className="w-full h-full flex justify-center items-center text-gray-600 text-lg">
@@ -65,7 +72,7 @@ export default function ProfilePage() {
           targetUserId={id}
           followStatus={followStatus}
           isMutualFollow={isMutualFollow}
-          onStatusChange={(newStatus) => setFollowStatus(newStatus)}
+          onStatusChange={handleStatusChange}
         />
       </div>
     </main>

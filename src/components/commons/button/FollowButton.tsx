@@ -34,7 +34,11 @@ export default function FollowButton({
   };
 
   if (isMutualFollow)
-    return <p className="text-[16px] text-green-600 x-[400px] bg-gray-d9 rounded-[4px] py-2 px-4">팔로잉</p>;
+    return (
+      <button onClick={handleUnfollow} className="bg-blue-500 text-white px-3 py-1 rounded">
+        팔로잉
+      </button>
+    );
 
   switch (followStatus) {
     case 'none':
