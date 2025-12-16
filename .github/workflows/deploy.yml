@@ -6,7 +6,7 @@ on:
       - dev
 
 env:
-  S3_BUCKET_NAME: calog-development
+  S3_BUCKET_NAME: calog-client-build
   CODE_DEPLOY_APPLICATION_NAME: calog-client-deploy
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: group1
 

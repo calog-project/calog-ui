@@ -8,7 +8,7 @@ export default async function MainPage() {
   const categoriesData = await fetchCategories();
 
   return (
-    <main className="relative flex flex-1 w-full h-full px-10 pb-10 overflow-hidden">
+    <main className="relative flex flex-1 w-full h-full px-10 pb-10 overflow-hidden mt-[70px]">
       <div className="flex flex-col gap-10">
         <MiniCalendar />
         <Category categoriesData={categoriesData} />

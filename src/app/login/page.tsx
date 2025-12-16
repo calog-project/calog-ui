@@ -19,7 +19,7 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { isValid },
   } = useForm<LoginForm>({
     mode: 'onChange',
   });
@@ -58,13 +58,32 @@ export default function LoginPage() {
 
   return (
     <section className="w-full h-full">
-      <div className="w-[603px] mx-auto p-[40px] flex flex-col">
-        <h2 className="mt-[80px] text-[32px] font-bold mx-auto">로그인</h2>
-        <form className="mt-[40px] flex flex-col gap-[24px]" onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-col">
-            <label htmlFor="email" className="mb-2 font-bold">
-              이메일
-            </label>
+      <div className="w-[500px] mx-auto p-[40px] flex flex-col">
+        <div className="flex flex-col gap-[20px] justify-around mt-[100px]">
+          <Button
+            className="w-full h-[50px] rounded-lg bg-cover bg-center bg-[#FEE500] flex items-center justify-start gap-4 px-6"
+            buttonSize="normal"
+            bgColor="filled"
+            onClick={() => handleOAuthLogin('kakao')}>
+            <Image src={KaKaoIcon} alt="카카오 로고 아이콘" className="w-[22px] h-[22px] rounded-[5px]" />
+            <p className="text-[#191919] font-medium w-full">카카오로 시작하기</p>
+          </Button>
+          <Button
+            className="w-full h-[50px] rounded-lg bg-cover bg-center bg-[#F2F2F2] flex items-center justify-start gap-4 px-4"
+            buttonSize="normal"
+            bgColor="filled"
+            onClick={() => handleOAuthLogin('google')}>
+            <Image src={GoogleIcon} alt="구글 로고 아이콘" className="w-[28px] h-[28px] rounded-[5px]" />
+            <p className="text-[#1F1F1F] font-medium w-full">구글로 시작하기</p>
+          </Button>
+        </div>
+        <div className="relative flex items-center justify-between mt-8 mb-2 w-full mx-auto">
+          <hr className="w-1/3 bg-gray-400 h-1" />
+          <span className="px-3 text-gray-700">이메일</span>
+          <hr className="w-1/3 bg-gray-400 h-1" />
+        </div>
+        <form className="mt-[20px] flex flex-col gap-[16px]" onSubmit={handleSubmit(onSubmit)}>
+          <div className="flex flex-col mb-4">
             <input
               type="email"
               placeholder="이메일을 입력하세요"
@@ -77,15 +96,9 @@ export default function LoginPage() {
               })}
               className="h-[50px] grow rounded-lg px-4 py-3 border border-gray-d9 focus:border-gray-98"
             />
-            <p className="text-[14px] mt-[4px] text-[#FF3B34]">
-              {errors.email && <span className="text-[14px] absolute text-red">{errors.email.message}</span>}
-            </p>
           </div>
 
           <div className="flex flex-col relative">
-            <label htmlFor="password" className="mb-2 font-bold">
-              비밀번호
-            </label>
             <input
               type={showPassword ? 'text' : 'password'}
               placeholder="비밀번호를 입력하세요"
@@ -108,38 +121,18 @@ export default function LoginPage() {
             </button>
           </div>
 
-          <div className="relative mx-auto">{loginError && <p className="text-[16px] text-red">{loginError}</p>}</div>
+          <div className="flex flex-col items-center gap-[10px]">
+            <div className="relative mx-auto">{loginError && <p className="text-[16px] text-red">{loginError}</p>}</div>
 
-          <button
-            className={`h-[52px] mt-[24px] w-full rounded-[4px] text-white ${isValid ? 'bg-blue-33' : 'bg-[#9FA6B2]'}`}
-            disabled={!isValid}
-            type="submit">
-            로그인
-          </button>
+            <button
+              className={`h-[50px] w-full rounded-[4px] text-white ${isValid ? 'bg-blue-33' : 'bg-[#9FA6B2]'}`}
+              disabled={!isValid}
+              type="submit">
+              로그인
+            </button>
+          </div>
         </form>
-        <div className="relative flex items-center justify-between my-8 w-[523px] mx-auto">
-          <hr className="w-[120px] h-px bg-gray-300" />
-          <span className="px-3 text-gray-400 bg-white z-10">SNS 로그인</span>
-          <hr className="w-[120px] h-px bg-gray-300" />
-        </div>
-        <div className="flex justify-around mt-6">
-          <Button
-            className="w-[250px] h-[50px] rounded-lg bg-cover bg-center bg-[#FFEA00]  flex items-center justify-center gap-4 "
-            buttonSize="normal"
-            bgColor="filled"
-            onClick={() => handleOAuthLogin('kakao')}>
-            <Image src={KaKaoIcon} alt="카카오 로고 아이콘" className="w-[22px] h-[25px] rounded-[5px]" />
-            <p className="text-black font-medium">카카오톡</p>
-          </Button>
-          <Button
-            className="w-[250px] h-[50px] rounded-lg bg-cover bg-center bg-[#EFEFEF] flex items-center justify-center gap-4 "
-            buttonSize="normal"
-            bgColor="filled"
-            onClick={() => handleOAuthLogin('google')}>
-            <Image src={GoogleIcon} alt="구글 로고 아이콘" className="w-[32px] h-[32px] rounded-[5px]" />
-            <p className="text-black font-medium">구글</p>
-          </Button>
-        </div>
+
         <div className="mt-6 text-center">
           아직 캘로그 회원이 아니신가요? {/* TODO 이후 href 회원가입 경로로 변경 */}
           <Link href="/register" className="text-blue-600 underline">
