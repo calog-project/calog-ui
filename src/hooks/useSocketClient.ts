@@ -4,26 +4,33 @@ import { useSocketStore } from '@/stores/socketStore';
 import { useFollowStore } from '@/stores/followStore';
 import { NotificationType } from '@/types/notification';
 
-export function useSocketClient(userId: number | undefined) {
+export function useSocketClient(userId: number | undefined, accessToken: string | undefined) {
   const socketRef = useRef<Socket | null>(null);
   const setNotification = useSocketStore((s) => s.setNotification);
   const { updateUserStatus, addFollower } = useFollowStore();
 
   useEffect(() => {
-    if (typeof userId !== 'number') return;
+    if (typeof userId !== 'number' || !accessToken) return;
     if (socketRef.current) return;
-    console.log(userId);
-    // const socket = io('https://api.calog-app.link/notification');
-    socketRef.current = io('https://api.calog-app.link/notification', { transports: ['websocket'] });
-    socketRef.current?.on('connect', () => {
-      console.log('이구맹맹이111');
-      socketRef.current?.emit('subscribe', { id: userId });
-      console.log('이구맹맹이');
+
+    socketRef.current = io(process.env.NEXT_PUBLIC_SOCKET_URL!, {
+      transports: ['websocket'],
+      extraHeaders: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
-    socketRef.current?.on('notification', (data) => {
+
+    socketRef.current.on('connect', () => {
+      console.log(`WebSocket connected: ${userId}`);
+      socketRef.current?.emit('join', { userId: userId });
+    });
+
+    socketRef.current.on('notification', (data) => {
+      console.log('Received notification data:', data);
+
       // 1. 알림으로 표시
       setNotification(data);
-      
+
       // 2. 팔로우 관련 실시간 상태 업데이트
       if (data.type === NotificationType.FOLLOW_REQUESTED) {
         // 팔로우 요청 받음 → 팔로워 목록에 추가
@@ -35,7 +42,7 @@ export function useSocketClient(userId: number | undefined) {
             email: requesterData.email,
             image: requesterData.image,
             status: 'pending_received',
-            isMutualFollow: false
+            isMutualFollow: false,
           });
         }
       } else if (data.type === NotificationType.FOLLOWED) {
@@ -47,11 +54,10 @@ export function useSocketClient(userId: number | undefined) {
       }
     });
 
-    console.log('이구맹');
-
     return () => {
+      console.log('🔌 WebSocket disconnected.');
       socketRef.current?.disconnect();
       socketRef.current = null;
     };
-  }, [userId, addFollower, setNotification, updateUserStatus]);
+  }, [userId, accessToken, addFollower, setNotification, updateUserStatus]);
 }
