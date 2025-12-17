@@ -1,7 +1,7 @@
 'use server';
 
 import { authOptions } from '@/app/api/auth/[...nextauth]/lib/authOption';
-import { FollowRequestMeta, NotificationItem, ScheduleInvitedMeta } from '@/types/notification';
+import { FollowRequestedMeta, NotificationItem, ScheduleInvitedMeta } from '@/types/notification';
 import { getServerSession } from 'next-auth';
 
 export async function getNotifications(userId: number): Promise<NotificationItem[]> {
@@ -30,7 +30,7 @@ export async function getNotifications(userId: number): Promise<NotificationItem
 }
 
 // 팔로우 요청 응답
-export async function respondToFollowRequest(meta: FollowRequestMeta, response: 'accept' | 'reject'): Promise<void> {
+export async function respondToFollowRequest(meta: FollowRequestedMeta, response: 'accept' | 'reject'): Promise<void> {
   const session = await getServerSession(authOptions);
   try {
     const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/follow`, {
@@ -52,10 +52,7 @@ export async function respondToFollowRequest(meta: FollowRequestMeta, response: 
 }
 
 // 일정 초대 응답
-export async function respondToScheduleInvite(
-  meta: ScheduleInvitedMeta,
-  response: 'accept' | 'reject',
-): Promise<void> {
+export async function respondToScheduleInvite(meta: ScheduleInvitedMeta, response: 'accept' | 'reject'): Promise<void> {
   const session = await getServerSession(authOptions);
   try {
     const apiResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/schedule/response`, {

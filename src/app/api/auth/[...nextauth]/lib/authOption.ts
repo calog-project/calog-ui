@@ -67,8 +67,6 @@ export const authOptions: NextAuthOptions = {
           const cookieStore = cookies();
           const refreshToken = cookieStore.get('refreshToken')?.value;
 
-          console.log(refreshToken);
-
           const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/auth/refresh`, {
             method: 'GET',
             credentials: 'include',
@@ -77,8 +75,6 @@ export const authOptions: NextAuthOptions = {
               Cookie: `refreshToken=${refreshToken}`,
             },
           });
-
-          console.log(response.headers);
 
           const resBody = await response.json();
           const user = resBody.payload?.data;

@@ -6,21 +6,17 @@ import { getUserInfo } from '@/api/user/user';
 import useAuthStore from '@/stores/authStore';
 import UserProfile from '@/components/domains/mypage/UserProfile';
 import UserList from '@/components/commons/userList/UserList';
-import { useSocketStore } from '@/stores/socketStore';
+// import { useSocketStore } from '@/stores/socketStore';
 import Button from '@/components/commons/button/Button';
 
 export default function MyPage() {
   const [follower, setFollower] = useState(0);
   const [following, setFollowing] = useState(0);
-  const { notifications } = useSocketStore();
-  console.log(notifications);
+  // const { notifications } = useSocketStore();
 
   const { user, accessToken } = useAuthStore();
   const nickname = user?.nickname;
   const profileImage = user?.image || '/images/user.svg';
-
-  console.log(user);
-  console.log(accessToken);
 
   useEffect(() => {
     const fetchFollowData = async () => {
