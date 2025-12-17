@@ -96,9 +96,11 @@ export default function ProfileEditPage() {
       const result = await updateUserProfile(formData);
       alert('프로필이 성공적으로 업데이트되었습니다.');
 
-      const newImageUrl = result.payload.data.image;
-      const updatedUser = { ...user, nickname: data.nickname, image: newImageUrl || imagePreview };
-      login(updatedUser, accessToken);
+      if (user && accessToken) {
+        const newImageUrl = result.payload.data.image;
+        const updatedUser = { ...user, nickname: data.nickname, image: newImageUrl || imagePreview };
+        login(updatedUser, accessToken);
+      }
 
       router.push('/mypage');
     } catch (error) {
@@ -122,20 +124,9 @@ export default function ProfileEditPage() {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="flex flex-col items-center space-y-4">
           <div className="relative w-32 h-32">
-            <Image
-              src={imagePreview}
-              alt="프로필 이미지"
-              fill
-              className="rounded-full object-cover"
-            />
+            <Image src={imagePreview} alt="프로필 이미지" fill className="rounded-full object-cover" />
           </div>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="hidden"
-            ref={imageInputRef}
-          />
+          <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" ref={imageInputRef} />
           <Button
             type="button"
             buttonSize="normal"

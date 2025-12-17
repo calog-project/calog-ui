@@ -82,7 +82,6 @@ const Register = () => {
           <ImageCropModal
             openModal={openModal}
             handleModalClose={handleModalClose}
-            setProfileImg={setProfileImg}
             selectedImg={selectedImg}
             originalFileName={originalFileName}
             onCropComplete={handleImageCompression}
