@@ -1,16 +1,33 @@
 #!/bin/bash
 set -e
-#!/bin/bash
-cd /home/ubuntu/calog-ui
 
-# Node.js 의존성 설치 (개발 의존성 포함)
-npm ci
+# 로그 리다이렉션 (배포 로그 저장)
+exec > >(tee /home/ubuntu/deploy.log) 2>&1
 
-# EC2에서 빌드 (Sharp.js 호환성)
-npm run build
+echo "Deployment started (Build Artifact Mode)..."
 
-# PM2로 Next.js 앱 시작
-pm2 start npm --name "calog-ui" -- start
+# 파일 소유권 변경 (Root -> Ubuntu)
+chown -R ubuntu:ubuntu /home/ubuntu/calog-ui
 
-# PM2 프로세스 저장
-pm2 save
+# Ubuntu 사용자로 실행
+runuser -l ubuntu -c '
+    # NVM 로드
+    export NVM_DIR="/home/ubuntu/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+    cd /home/ubuntu/calog-ui
+    echo "Node version: $(node -v)"
+
+    # PM2 실행 (이미 있으면 reload, 없으면 start)
+    if pm2 list | grep -q "calog-ui"; then
+        echo "Reloading..."
+        pm2 reload calog-ui
+    else
+        echo "Starting..."
+        pm2 start server.js --name "calog-ui"
+    fi
+
+    pm2 save
+'
+
+echo "Deployment finished."
